@@ -110,10 +110,15 @@ const roles = [
     title: "PRODUCER",
     image: "/home3.jpg",
     projects: [
-      { title: "Independent Film", category: "NARRATIVE", image: "/producer1.jpg" },
-      { title: "Short Film Series", category: "TRAILER", image: "/producer2.jpg" },
-      { title: "Documentary Series", category: "DOCUMENTARY", image: "/producer3.jpg" },
-      { title: "Corporate Video", category: "COMMERCIAL", image: "/producer4.jpg" },
+      {
+        title: "AMERICAN BEAUTY",
+        category: "SHORT FILM",
+        image: "/home21.png",
+        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
+        description:
+          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
+        screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
+      },
     ],
   },
   {
