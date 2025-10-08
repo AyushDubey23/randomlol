@@ -129,7 +129,7 @@ const roles = [
         title: "COCAINE TOILET",
         category: "SHORT FILM",
         image: "/home4.png",
-        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
+        videoUrl: "https://www.youtube.com/watch?v=2JGmAgjSktk",
         description:
           "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
         screenshots: ["s.png", "s2.png", "s3.png", "s5.png", "s6.png", "s7.png", "s8.png", "s9.png", "s10.png"],
@@ -144,7 +144,7 @@ const roles = [
         title: "NARCISSUS & ECHO",
         category: "SHORT FILM",
         image: "/home5.png",
-        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
+        videoUrl: "https://www.youtube.com/watch?v=sGkA3N5AHv4",
         description:
           "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
         screenshots: ["o.png", "o2.png", "o3.png", "o5.png", "o6.png", "o7.png", "o8.png", "o9.png", "o10.png"],
