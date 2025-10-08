@@ -108,7 +108,7 @@ const roles = [
   },
   {
     title: "PRODUCER",
-    image: "/home3.jpg",
+    image: "/home3.png",
     projects: [
       {
         title: "AMERICAN BEAUTY",
