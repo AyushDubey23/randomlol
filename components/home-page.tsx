@@ -236,7 +236,7 @@ export default function HomePage() {
               <img
                 src={role.image || "/placeholder.svg"}
                 alt={role.title}
-                className="w-full h-full object-cover tile-image"
+                className="w-full h-full object-cover tile-image tile-background"
               />
 
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-10">
@@ -284,6 +284,54 @@ export default function HomePage() {
   const renderProjects = (roleTitle: string) => {
     const role = roles.find((r) => r.title.toLowerCase().replace(/[^a-z]/g, "") === roleTitle)
     if (!role) return null
+      if (roleTitle === "photographer") {
+      const photos = ["/photo1.png", "/photo2.png", "/photo3.png", "/photo4.png"]
+      return (
+        <div className="min-h-screen bg-background overflow-x-hidden">
+          <header className="fixed top-0 left-0 right-0 z-40 bg-background">
+            <div className="container mx-auto px-6 py-6 flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
+                <p className="text-xs text-gray-600 tracking-[0.15em] mt-1">FILM STUDENT</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="hover:bg-transparent hamburger-icon"
+              >
+                <Menu className="h-5 w-5 text-black" />
+              </Button>
+            </div>
+          </header>
+
+          {/* no gaps between images, each is full viewport height */}
+          <div className="pt-24">
+            <div className="space-y-0">
+              {photos.map((src, i) => (
+                <div key={i} className="relative h-screen overflow-hidden">
+                  <img
+                    src={src || "/placeholder.svg"}
+                    alt={`Photography ${i + 1}`}
+                    className="w-full h-full object-cover tile-image"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center py-10">
+              <Button
+                variant="ghost"
+                onClick={() => resetToHome()}
+                className="text-gray-600 hover:text-black tracking-wider hover-scale"
+              >
+                ← Back to Home
+              </Button>
+            </div>
+          </div>
+        </div>
+      )
+    }
 
     return (
       <div className="min-h-screen bg-background overflow-x-hidden">

@@ -31,7 +31,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
           <div className="h-0.5 bg-border rounded-full overflow-hidden">
             <div className="h-full bg-primary transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
           </div>
-          <p className="text-sm text-muted-foreground mt-2 pulse-slow">Loading Portfolio...</p>
+          {/* removed status text */}
         </div>
       </div>
     </div>
