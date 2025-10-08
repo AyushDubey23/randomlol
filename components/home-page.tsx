@@ -200,9 +200,36 @@ export default function HomePage() {
     }
   }, [selectedProject])
 
-  const getEmbedUrl = (driveUrl: string) => {
-    const fileId = driveUrl.match(/\/d\/([a-zA-Z0-9-_]+)/)?.[1]
-    return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : driveUrl
+ const getEmbedUrl = (rawUrl: string) => {
+    if (!rawUrl) return ""
+
+    // Google Drive formats
+    const driveMatch =
+      rawUrl.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+      rawUrl.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/)
+    if (driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`
+
+    // YouTube formats: watch?v=, youtu.be/, embed/, shorts/, live/
+    const ytMatch = rawUrl.match(/(youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/))([A-Za-z0-9_-]{6,})/)
+    if (ytMatch) {
+      const id = ytMatch[2]
+      // attempt to preserve start time (t or start)
+      let start = ""
+      try {
+        const u = new URL(rawUrl)
+        const t = u.searchParams.get("t") || u.searchParams.get("start")
+        if (t) {
+          const secs = Number.parseInt(t, 10)
+          if (!Number.isNaN(secs)) start = `?start=${secs}`
+        }
+      } catch {
+        // ignore URL parsing errors for non-absolute URLs
+      }
+      return `https://www.youtube.com/embed/${id}${start}`
+    }
+
+    // fallback: return as-is for other providers
+    return rawUrl
   }
 
   const renderHome = () => (
