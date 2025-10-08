@@ -287,7 +287,7 @@ export default function HomePage() {
       if (roleTitle === "photographer") {
       const photos = ["/photo1.png", "/photo2.png", "/photo3.png", "/photo4.png"]
       return (
-        <div className="min-h-screen bg-background overflow-x-hidden">
+        <div className="min-h-screen bg-background overflow-x-hidden no-blur">
           <header className="fixed top-0 left-0 right-0 z-40 bg-background">
             <div className="container mx-auto px-6 py-6 flex items-center justify-between">
               <div>
@@ -313,7 +313,7 @@ export default function HomePage() {
                   <img
                     src={src || "/placeholder.svg"}
                     alt={`Photography ${i + 1}`}
-                    className="w-full h-full object-cover tile-image"
+                    className="w-full h-full object-cover photography-img"
                   />
                 </div>
               ))}
@@ -337,7 +337,14 @@ export default function HomePage() {
       <div className="min-h-screen bg-background overflow-x-hidden">
         <header className="fixed top-0 left-0 right-0 z-40 bg-background">
           <div className="container mx-auto px-6 py-6 flex items-center justify-between">
-            <div>
+                      <div
+            role="button"
+            tabIndex={0}
+            onClick={navigateToBio}
+            onKeyDown={(e) => e.key === "Enter" && navigateToBio()}
+            aria-label="Open Bio | Contact"
+            className="cursor-pointer select-none outline-none"
+          >
               <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
               <p className="text-xs text-gray-600 tracking-[0.15em] mt-1">FILM STUDENT</p>
             </div>

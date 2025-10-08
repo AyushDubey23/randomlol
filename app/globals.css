@@ -160,14 +160,16 @@
 }
 
 /* Added blur effect on hover for background images */
-.tile-hover:hover .tile-background {
-  filter: blur(3px);
-  transition: filter 0.3s ease;
-}
-
+.tile-hover .tile-image,
 .tile-hover .tile-background {
   filter: blur(0px);
   transition: filter 0.3s ease;
+  will-change: filter;
+}
+
+.tile-hover:hover .tile-image,
+.tile-hover:hover .tile-background {
+  filter: blur(3px);
 }
 
 /* Text magnification on hover */
@@ -280,4 +282,36 @@
 
 .hamburger-icon:focus {
   outline: none;
+}
+
+/* ensure blur applies to actual image class and avoid edge glow */
+.tile-image,
+.tile-background {
+  filter: blur(0px);
+  transition: filter 0.3s ease;
+  will-change: filter;
+}
+
+.tile-image:hover,
+.tile-background:hover {
+  filter: blur(3px);
+}
+
+/* make overlay text consistently centered on all breakpoints */
+.tile-text {
+  text-align: center;
+  display: inline-block;
+}
+
+/* Disable blur within photography section and hard-disable on photography images */
+.no-blur .tile-hover:hover .tile-image,
+.no-blur .tile-hover:hover .tile-background,
+.no-blur .tile-image,
+.no-blur .tile-background,
+.photography-img {
+  filter: none !important;
+  -webkit-filter: none !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0); /* avoids filter edge artifacts */
 }
