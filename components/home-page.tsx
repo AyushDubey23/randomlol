@@ -117,33 +117,43 @@ const roles = [
         videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
         description:
           "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
-        screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
+        screenshots: ["p.png", "p2.png", "p3.png", "p5.png", "p6.png", "p7.png"],
       },
     ],
   },
   {
     title: "SOUND DESIGNER",
-    image: "/home4.jpg",
+    image: "/home4.png",
     projects: [
-      { title: "Audio Drama", category: "NARRATIVE", image: "/sounddesigner1.jpg" },
-      { title: "Film Score", category: "TRAILER", image: "/sounddesigner2.jpg" },
-      { title: "Podcast Series", category: "DOCUMENTARY", image: "/sounddesigner3.jpg" },
-      { title: "Brand Audio", category: "COMMERCIAL", image: "/sounddesigner4.jpg" },
+      {
+        title: "COCAINE TOILET",
+        category: "SHORT FILM",
+        image: "/home4.png",
+        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
+        description:
+          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
+        screenshots: ["s.png", "s2.png", "s3.png", "s5.png", "s6.png", "s7.png", "s8.png", "s9.png", "s10.png"],
+      },
     ],
   },
   {
     title: "SOUND OPERATOR",
-    image: "/home5.jpg",
+    image: "/home5.png",
     projects: [
-      { title: "Dialogue Recording", category: "NARRATIVE", image: "/boommicoperator1.jpg" },
-      { title: "Location Sound", category: "TRAILER", image: "/boommicoperator2.jpg" },
-      { title: "Interview Setup", category: "DOCUMENTARY", image: "/boommicoperator3.jpg" },
-      { title: "Live Recording", category: "COMMERCIAL", image: "/boommicoperator4.jpg" },
+      {
+        title: "NARCISSUS & ECHO",
+        category: "SHORT FILM",
+        image: "/home5.png",
+        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
+        description:
+          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
+        screenshots: ["o.png", "o2.png", "o3.png", "o5.png", "o6.png", "o7.png", "o8.png", "o9.png", "o10.png"],
+      },
     ],
   },
   {
     title: "PHOTOGRAPHER",
-    image: "/home6.jpg",
+    image: "/home6.png",
     projects: [
       { title: "Portrait Series", category: "NARRATIVE", image: "/photographer1.jpg" },
       { title: "Behind Scenes", category: "TRAILER", image: "/photographer2.jpg" },
