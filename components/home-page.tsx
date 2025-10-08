@@ -124,12 +124,11 @@ const roles = [
   {
     title: "SOUND DESIGNER",
     image: "/home4.jpeg",
-    image: "/home4.jpeg",
     projects: [
       {
         title: "COCAINE TOILET",
         category: "SHORT FILM",
-        image: "/home4.png",
+        image: "/home4.jpeg",
         videoUrl: "https://www.youtube.com/watch?v=2JGmAgjSktk",
         description:
           "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
