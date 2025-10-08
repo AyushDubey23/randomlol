@@ -123,7 +123,8 @@ const roles = [
   },
   {
     title: "SOUND DESIGNER",
-    image: "/home4.png",
+    image: "/home4.jpeg",
+    image: "/home4.jpeg",
     projects: [
       {
         title: "COCAINE TOILET",
