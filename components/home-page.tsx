@@ -36,7 +36,7 @@ const roles = [
         title: "Happy Hours with Ralf",
         category: "TALK SHOW",
         image: "/director2.png",
-        videoUrl: "https://drive.google.com/file/d/1yIWB43aChruFhe2tYBcNfDi_h6f_v9bU/view?usp=drive_link",
+        videoUrl: "https://youtu.be/dQw4w9WgXcQ",
         description:
           "Scriptwriter- ...Led the creative vision and execution of the episode in a student production, ensuring a cohesive narrative and engaging flow. -Directed talent and crew, managing on-set dynamics for a smooth production. -Oversaw shot composition, pacing, and performance to maintain the show's tone and energy.",
         screenshots: [
@@ -56,7 +56,7 @@ const roles = [
         title: "Babuji Dheere Chalna",
         category: "MUSIC VIDEO",
         image: "/director3.png",
-        videoUrl: "https://drive.google.com/file/d/1whUopyByAXlyyLgewC594PHKf0z_sSxK/view?usp=drive_link",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         description:
           "Led a dynamic team of nine individuals, with the unique distinction of being the youngest member among them. -Wrote, story boarded and choreographed a story on an existing 1950s song -Executed the entire independent production cycle with efficiency and precision, within an impressive nine-day time frame.",
         screenshots: [
@@ -108,52 +108,37 @@ const roles = [
   },
   {
     title: "PRODUCER",
-    image: "/home3.png",
+    image: "/home3.jpg",
     projects: [
-      {
-        title: "AMERICAN BEAUTY",
-        category: "SHORT FILM",
-        image: "/home3.png",
-        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
-        description:
-          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
-        screenshots: ["p.png", "p2.png", "p3.png", "p5.png", "p6.png", "p7.png"],
-      },
+      { title: "Independent Film", category: "NARRATIVE", image: "/producer1.jpg" },
+      { title: "Short Film Series", category: "TRAILER", image: "/producer2.jpg" },
+      { title: "Documentary Series", category: "DOCUMENTARY", image: "/producer3.jpg" },
+      { title: "Corporate Video", category: "COMMERCIAL", image: "/producer4.jpg" },
     ],
   },
   {
     title: "SOUND DESIGNER",
-    image: "/home4.jpeg",
+    image: "/home4.jpg",
     projects: [
-      {
-        title: "COCAINE TOILET",
-        category: "SHORT FILM",
-        image: "/home4.jpeg",
-        videoUrl: "https://www.youtube.com/watch?v=2JGmAgjSktk",
-        description:
-          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
-        screenshots: ["s.png", "s2.png", "s3.png", "s5.png", "s6.png", "s7.png", "s8.png", "s9.png", "s10.png"],
-      },
+      { title: "Audio Drama", category: "NARRATIVE", image: "/sounddesigner1.jpg" },
+      { title: "Film Score", category: "TRAILER", image: "/sounddesigner2.jpg" },
+      { title: "Podcast Series", category: "DOCUMENTARY", image: "/sounddesigner3.jpg" },
+      { title: "Brand Audio", category: "COMMERCIAL", image: "/sounddesigner4.jpg" },
     ],
   },
   {
     title: "SOUND OPERATOR",
-    image: "/home5.png",
+    image: "/home5.jpg",
     projects: [
-      {
-        title: "NARCISSUS & ECHO",
-        category: "SHORT FILM",
-        image: "/home5.png",
-        videoUrl: "https://www.youtube.com/watch?v=sGkA3N5AHv4",
-        description:
-          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
-        screenshots: ["o.png", "o2.png", "o3.png", "o5.png", "o6.png", "o7.png", "o8.png", "o9.png", "o10.png"],
-      },
+      { title: "Dialogue Recording", category: "NARRATIVE", image: "/boommicoperator1.jpg" },
+      { title: "Location Sound", category: "TRAILER", image: "/boommicoperator2.jpg" },
+      { title: "Interview Setup", category: "DOCUMENTARY", image: "/boommicoperator3.jpg" },
+      { title: "Live Recording", category: "COMMERCIAL", image: "/boommicoperator4.jpg" },
     ],
   },
   {
     title: "PHOTOGRAPHER",
-    image: "/home6.png",
+    image: "/home6.jpg",
     projects: [
       { title: "Portrait Series", category: "NARRATIVE", image: "/photographer1.jpg" },
       { title: "Behind Scenes", category: "TRAILER", image: "/photographer2.jpg" },
@@ -163,27 +148,30 @@ const roles = [
   },
 ]
 
-const navigationHistory: { section: string; role: string | null; project: any | null }[] = []
-
-
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [currentSection, setCurrentSection] = useState("home")
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
   const [selectedProject, setSelectedProject] = useState<any>(null)
   const [currentScreenshot, setCurrentScreenshot] = useState(0)
+  const [navigationHistory, setNavigationHistory] = useState<
+    { section: string; role: string | null; project: any | null }[]
+  >([{ section: "home", role: null, project: null }])
 
-  
   useEffect(() => {
     const handlePopState = () => {
-      if (navigationHistory.length > 1) {
-        navigationHistory.pop() // Remove current state
-        const previousState = navigationHistory[navigationHistory.length - 1]
-        setCurrentSection(previousState.section)
-        setSelectedRole(previousState.role)
-        setSelectedProject(previousState.project)
-        setCurrentScreenshot(0)
-      }
+      setNavigationHistory((prevHistory) => {
+        if (prevHistory.length > 1) {
+          const newHistory = prevHistory.slice(0, -1)
+          const previousState = newHistory[newHistory.length - 1]
+          setCurrentSection(previousState.section)
+          setSelectedRole(previousState.role)
+          setSelectedProject(previousState.project)
+          setCurrentScreenshot(0)
+          return newHistory
+        }
+        return prevHistory
+      })
     }
 
     window.addEventListener("popstate", handlePopState)
@@ -191,7 +179,7 @@ export default function HomePage() {
   }, [])
 
   const updateHistory = (section: string, role: string | null, project: any | null) => {
-    navigationHistory.push({ section, role, project })
+    setNavigationHistory((prevHistory) => [...prevHistory, { section, role, project }])
     window.history.pushState({ section, role, project }, "")
   }
 
@@ -200,6 +188,7 @@ export default function HomePage() {
     setSelectedRole(null)
     setSelectedProject(null)
     setCurrentScreenshot(0)
+    updateHistory("home", null, null)
   }
 
   const navigateToRole = (role: string) => {
@@ -207,6 +196,7 @@ export default function HomePage() {
     setSelectedProject(null)
     setCurrentSection("home")
     setCurrentScreenshot(0)
+    updateHistory("home", role, null)
   }
 
   const navigateToBio = () => {
@@ -214,6 +204,12 @@ export default function HomePage() {
     setSelectedRole(null)
     setSelectedProject(null)
     setCurrentScreenshot(0)
+    updateHistory("bio", null, null)
+  }
+
+  const handleProjectClick = (project: any) => {
+    setSelectedProject(project)
+    updateHistory("home", selectedRole, project)
   }
 
   useEffect(() => {
@@ -225,7 +221,7 @@ export default function HomePage() {
     }
   }, [selectedProject])
 
- const getEmbedUrl = (rawUrl: string) => {
+  const getEmbedUrl = (rawUrl: string) => {
     if (!rawUrl) return ""
 
     // Google Drive formats
@@ -261,7 +257,14 @@ export default function HomePage() {
     <div className="min-h-screen overflow-x-hidden">
       <header className="fixed top-0 left-0 right-0 z-40 bg-background">
         <div className="container mx-auto px-6 py-6 flex items-center justify-between">
-          <div>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={navigateToBio}
+            onKeyDown={(e) => e.key === "Enter" && navigateToBio()}
+            aria-label="Open Bio | Contact"
+            className="cursor-pointer select-none outline-none"
+          >
             <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
             <p className="text-xs text-gray-600 tracking-[0.15em] mt-1">FILM STUDENT</p>
           </div>
@@ -336,7 +339,8 @@ export default function HomePage() {
   const renderProjects = (roleTitle: string) => {
     const role = roles.find((r) => r.title.toLowerCase().replace(/[^a-z]/g, "") === roleTitle)
     if (!role) return null
-      if (roleTitle === "photographer") {
+
+    if (roleTitle === "photographer") {
       const photos = ["/photo1.png", "/photo2.png", "/photo3.png", "/photo4.png"]
       return (
         <div className="min-h-screen bg-background overflow-x-hidden no-blur">
@@ -357,7 +361,6 @@ export default function HomePage() {
             </div>
           </header>
 
-          {/* no gaps between images, each is full viewport height */}
           <div className="pt-24">
             <div className="space-y-0">
               {photos.map((src, i) => (
@@ -389,14 +392,7 @@ export default function HomePage() {
       <div className="min-h-screen bg-background overflow-x-hidden">
         <header className="fixed top-0 left-0 right-0 z-40 bg-background">
           <div className="container mx-auto px-6 py-6 flex items-center justify-between">
-                      <div
-            role="button"
-            tabIndex={0}
-            onClick={navigateToBio}
-            onKeyDown={(e) => e.key === "Enter" && navigateToBio()}
-            aria-label="Open Bio | Contact"
-            className="cursor-pointer select-none outline-none"
-          >
+            <div>
               <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
               <p className="text-xs text-gray-600 tracking-[0.15em] mt-1">FILM STUDENT</p>
             </div>
@@ -419,7 +415,7 @@ export default function HomePage() {
                 <div
                   key={project.title}
                   className="relative h-[40vh] bg-gray-100 overflow-hidden group cursor-pointer tile-hover"
-                  onClick={() => setSelectedProject(project)}
+                  onClick={() => handleProjectClick(project)}
                 >
                   <img
                     src={project.image || "/placeholder.svg"}
@@ -482,7 +478,8 @@ export default function HomePage() {
                 <iframe
                   src={getEmbedUrl(project.videoUrl)}
                   className="w-full h-full"
-                  allow="autoplay"
+                  title={`${project.title} video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 />
               </div>
