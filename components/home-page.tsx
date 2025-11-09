@@ -163,12 +163,37 @@ const roles = [
   },
 ]
 
+const navigationHistory: { section: string; role: string | null; project: any | null }[] = []
+
+
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [currentSection, setCurrentSection] = useState("home")
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
   const [selectedProject, setSelectedProject] = useState<any>(null)
   const [currentScreenshot, setCurrentScreenshot] = useState(0)
+
+  
+  useEffect(() => {
+    const handlePopState = () => {
+      if (navigationHistory.length > 1) {
+        navigationHistory.pop() // Remove current state
+        const previousState = navigationHistory[navigationHistory.length - 1]
+        setCurrentSection(previousState.section)
+        setSelectedRole(previousState.role)
+        setSelectedProject(previousState.project)
+        setCurrentScreenshot(0)
+      }
+    }
+
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [])
+
+  const updateHistory = (section: string, role: string | null, project: any | null) => {
+    navigationHistory.push({ section, role, project })
+    window.history.pushState({ section, role, project }, "")
+  }
 
   const resetToHome = () => {
     setCurrentSection("home")
