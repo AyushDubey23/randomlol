@@ -36,7 +36,7 @@ const roles = [
         title: "Happy Hours with Ralf",
         category: "TALK SHOW",
         image: "/director2.png",
-        videoUrl: "https://youtu.be/dQw4w9WgXcQ",
+        videoUrl: "https://drive.google.com/file/d/1yIWB43aChruFhe2tYBcNfDi_h6f_v9bU/view?usp=drive_link",
         description:
           "A short student documentary exploring the impact of web cookies and digital tracking on everyday users. The film combines personal data analysis, street interviews, expert insights, and visual evidence to raise awareness about online privacy and data ethics.",
         screenshots: [
@@ -56,7 +56,7 @@ const roles = [
         title: "Babuji Dheere Chalna",
         category: "MUSIC VIDEO",
         image: "/director3.png",
-        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://drive.google.com/file/d/1whUopyByAXlyyLgewC594PHKf0z_sSxK/view?usp=drive_link",
         description:
           "Led a dynamic team of nine individuals, with the unique distinction of being the youngest member among them. Wrote, story boarded and choreographed a story on an existing 1950s song. Executed the entire independent production cycle with efficiency and precision, within an impressive nine-day time frame.",
         screenshots: [
@@ -84,7 +84,7 @@ const roles = [
         title: "TRAPPED IN REVERIE",
         category: "SHORT FILM",
         image: "/home2.png",
-        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
+        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view?usp=drive_link",
         description:
           "Trapped In Reverie - Edited a student short film exploring the concept of lucid dreaming. Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. Also contributed as a gaffer on set, managing lighting to enhance the film's visual narrative.",
         screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
@@ -99,7 +99,7 @@ const roles = [
         title: "TRAPPED IN REVERIE",
         category: "SHORT FILM",
         image: "/home21.png",
-        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
+        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view?usp=drive_link",
         description:
           "Trapped In Reverie - Edited a student short film exploring the concept of lucid dreaming. Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. Also contributed as a gaffer on set, managing lighting to enhance the film's visual narrative.",
         screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
@@ -114,7 +114,7 @@ const roles = [
         title: "AMERICAN BEAUTY",
         category: "SHORT FILM",
         image: "/home3.png",
-        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
+        videoUrl: "https://drive.google.com/file/d/11ZgkeQhRW4AI28kGxSfo-MQwx-i-6zhZ/view?usp=sharing",
         description:
           "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
         screenshots: ["p.png", "p2.png", "p3.png", "p5.png", "p6.png", "p7.png"],
