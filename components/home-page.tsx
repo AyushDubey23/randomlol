@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Menu, X, Instagram, Linkedin, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react"
+import { Menu, X, Instagram, Linkedin, Mail, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const roles = [
@@ -15,8 +15,7 @@ const roles = [
         image: "/director1.png",
         videoUrl: "https://drive.google.com/file/d/1ONMIidN4gjZ_m0TdjttoKS0Pepdah0V8/view?usp=sharing",
         description:
-          "-A short student documentary exploring the impact of webcookies and digital tracking on everyday users.-The film combines personal data analysis, street interviews, expert insights,and visual evidence to raise awareness about online privacy and data ethics.
-",
+          "A short student documentary exploring the impact of web cookies and digital tracking on everyday users. The film combines personal data analysis, street interviews, expert insights, and visual evidence to raise awareness about online privacy and data ethics.",
         screenshots: [
           "d31.png",
           "d32.png",
@@ -39,7 +38,7 @@ const roles = [
         image: "/director2.png",
         videoUrl: "https://youtu.be/dQw4w9WgXcQ",
         description:
-          "-A short student documentary exploring the impact of web cookies and digital tracking on everyday users. -The film combines personal data analysis, street interviews, expert insights, and visual evidence to raise awareness about online privacy and data ethics. ",
+          "A short student documentary exploring the impact of web cookies and digital tracking on everyday users. The film combines personal data analysis, street interviews, expert insights, and visual evidence to raise awareness about online privacy and data ethics.",
         screenshots: [
           "d21.png",
           "d22.png",
@@ -59,7 +58,7 @@ const roles = [
         image: "/director3.png",
         videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         description:
-          "Led a dynamic team of nine individuals, with the unique distinction of being the youngest member among them. -Wrote, story boarded and choreographed a story on an existing 1950s song -Executed the entire independent production cycle with efficiency and precision, within an impressive nine-day time frame.",
+          "Led a dynamic team of nine individuals, with the unique distinction of being the youngest member among them. Wrote, story boarded and choreographed a story on an existing 1950s song. Executed the entire independent production cycle with efficiency and precision, within an impressive nine-day time frame.",
         screenshots: [
           "d11.png",
           "d12.png",
@@ -87,7 +86,7 @@ const roles = [
         image: "/home2.png",
         videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
         description:
-          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
+          "Trapped In Reverie - Edited a student short film exploring the concept of lucid dreaming. Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. Also contributed as a gaffer on set, managing lighting to enhance the film's visual narrative.",
         screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
       },
     ],
@@ -102,44 +101,59 @@ const roles = [
         image: "/home21.png",
         videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
         description:
-          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
+          "Trapped In Reverie - Edited a student short film exploring the concept of lucid dreaming. Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. Also contributed as a gaffer on set, managing lighting to enhance the film's visual narrative.",
         screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
       },
     ],
   },
   {
     title: "PRODUCER",
-    image: "/home3.jpg",
+    image: "/home3.png",
     projects: [
-      { title: "Independent Film", category: "NARRATIVE", image: "/producer1.jpg" },
-      { title: "Short Film Series", category: "TRAILER", image: "/producer2.jpg" },
-      { title: "Documentary Series", category: "DOCUMENTARY", image: "/producer3.jpg" },
-      { title: "Corporate Video", category: "COMMERCIAL", image: "/producer4.jpg" },
+      {
+        title: "AMERICAN BEAUTY",
+        category: "SHORT FILM",
+        image: "/home3.png",
+        videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view",
+        description:
+          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
+        screenshots: ["p.png", "p2.png", "p3.png", "p5.png", "p6.png", "p7.png"],
+      },
     ],
   },
   {
     title: "SOUND DESIGNER",
-    image: "/home4.jpg",
+    image: "/home4.jpeg",
     projects: [
-      { title: "Audio Drama", category: "NARRATIVE", image: "/sounddesigner1.jpg" },
-      { title: "Film Score", category: "TRAILER", image: "/sounddesigner2.jpg" },
-      { title: "Podcast Series", category: "DOCUMENTARY", image: "/sounddesigner3.jpg" },
-      { title: "Brand Audio", category: "COMMERCIAL", image: "/sounddesigner4.jpg" },
+      {
+        title: "COCAINE TOILET",
+        category: "SHORT FILM",
+        image: "/home4.jpeg",
+        videoUrl: "https://www.youtube.com/watch?v=2JGmAgjSktk",
+        description:
+          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
+        screenshots: ["s.png", "s2.png", "s3.png", "s5.png", "s6.png", "s7.png", "s8.png", "s9.png", "s10.png"],
+      },
     ],
   },
   {
     title: "SOUND OPERATOR",
-    image: "/home5.jpg",
+    image: "/home5.png",
     projects: [
-      { title: "Dialogue Recording", category: "NARRATIVE", image: "/boommicoperator1.jpg" },
-      { title: "Location Sound", category: "TRAILER", image: "/boommicoperator2.jpg" },
-      { title: "Interview Setup", category: "DOCUMENTARY", image: "/boommicoperator3.jpg" },
-      { title: "Live Recording", category: "COMMERCIAL", image: "/boommicoperator4.jpg" },
+      {
+        title: "NARCISSUS & ECHO",
+        category: "SHORT FILM",
+        image: "/home5.png",
+        videoUrl: "https://www.youtube.com/watch?v=sGkA3N5AHv4",
+        description:
+          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
+        screenshots: ["o.png", "o2.png", "o3.png", "o5.png", "o6.png", "o7.png", "o8.png", "o9.png", "o10.png"],
+      },
     ],
   },
   {
     title: "PHOTOGRAPHER",
-    image: "/home6.jpg",
+    image: "/home6.png",
     projects: [
       { title: "Portrait Series", category: "NARRATIVE", image: "/photographer1.jpg" },
       { title: "Behind Scenes", category: "TRAILER", image: "/photographer2.jpg" },
@@ -149,39 +163,43 @@ const roles = [
   },
 ]
 
+
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [currentSection, setCurrentSection] = useState("home")
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
   const [selectedProject, setSelectedProject] = useState<any>(null)
   const [currentScreenshot, setCurrentScreenshot] = useState(0)
-  const [navigationHistory, setNavigationHistory] = useState<
-    { section: string; role: string | null; project: any | null }[]
-  >([{ section: "home", role: null, project: null }])
 
   useEffect(() => {
-    const handlePopState = () => {
-      setNavigationHistory((prevHistory) => {
-        if (prevHistory.length > 1) {
-          const newHistory = prevHistory.slice(0, -1)
-          const previousState = newHistory[newHistory.length - 1]
-          setCurrentSection(previousState.section)
-          setSelectedRole(previousState.role)
-          setSelectedProject(previousState.project)
-          setCurrentScreenshot(0)
-          return newHistory
-        }
-        return prevHistory
-      })
+    window.scrollTo(0, 0)
+  }, [currentSection, selectedRole, selectedProject])
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state
+      if (state) {
+        setCurrentSection(state.section || "home")
+        setSelectedRole(state.selectedRole || null)
+        setSelectedProject(state.selectedProject || null)
+        setCurrentScreenshot(state.currentScreenshot || 0)
+      }
     }
 
     window.addEventListener("popstate", handlePopState)
     return () => window.removeEventListener("popstate", handlePopState)
   }, [])
 
-  const updateHistory = (section: string, role: string | null, project: any | null) => {
-    setNavigationHistory((prevHistory) => [...prevHistory, { section, role, project }])
-    window.history.pushState({ section, role, project }, "")
+  const pushState = (section: string, selectedRole: string | null = null, selectedProject: any = null) => {
+    window.history.pushState(
+      {
+        section,
+        selectedRole,
+        selectedProject,
+        currentScreenshot: 0,
+      },
+      "",
+    )
   }
 
   const resetToHome = () => {
@@ -189,7 +207,7 @@ export default function HomePage() {
     setSelectedRole(null)
     setSelectedProject(null)
     setCurrentScreenshot(0)
-    updateHistory("home", null, null)
+    pushState("home")
   }
 
   const navigateToRole = (role: string) => {
@@ -197,7 +215,7 @@ export default function HomePage() {
     setSelectedProject(null)
     setCurrentSection("home")
     setCurrentScreenshot(0)
-    updateHistory("home", role, null)
+    pushState("home", role)
   }
 
   const navigateToBio = () => {
@@ -205,12 +223,14 @@ export default function HomePage() {
     setSelectedRole(null)
     setSelectedProject(null)
     setCurrentScreenshot(0)
-    updateHistory("bio", null, null)
+    pushState("bio")
   }
 
   const handleProjectClick = (project: any) => {
     setSelectedProject(project)
-    updateHistory("home", selectedRole, project)
+    setCurrentScreenshot(0)
+    window.scrollTo(0, 0)
+    pushState("home", selectedRole, project)
   }
 
   useEffect(() => {
@@ -261,9 +281,9 @@ export default function HomePage() {
           <div
             role="button"
             tabIndex={0}
-            onClick={navigateToBio}
-            onKeyDown={(e) => e.key === "Enter" && navigateToBio()}
-            aria-label="Open Bio | Contact"
+            onClick={resetToHome}
+            onKeyDown={(e) => e.key === "Enter" && resetToHome()}
+            aria-label="Go to Home"
             className="cursor-pointer select-none outline-none"
           >
             <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
@@ -323,12 +343,10 @@ export default function HomePage() {
               <Linkedin className="h-4 w-4" />
             </a>
             <a
-              href="https://api.whatsapp.com/send?phone=919559314530"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:bajajhriday2005@gmail.com"
               className="text-gray-400 hover:text-gray-600 transition-colors social-icon"
             >
-              <MessageCircle className="h-4 w-4" />
+              <Mail className="h-4 w-4" />
             </a>
           </div>
           <p className="text-center text-xs text-gray-500 tracking-wider">© 2024 Hriday Bajaj. All rights reserved.</p>
@@ -540,7 +558,7 @@ export default function HomePage() {
                       <div
                         key={otherProject.title}
                         className="relative h-[30vh] bg-gray-100 overflow-hidden group cursor-pointer tile-hover"
-                        onClick={() => setSelectedProject(otherProject)}
+                        onClick={() => handleProjectClick(otherProject)}
                       >
                         <img
                           src={otherProject.image || "/placeholder.svg"}
@@ -650,10 +668,6 @@ export default function HomePage() {
       <div className="border-t border-gray-200 py-8">
         <div className="container mx-auto px-6 text-center">
           <div className="flex items-center space-x-8 text-sm">
-            <a href="#" className="text-gray-600 hover:text-black transition-colors tracking-wider">
-              IMDB
-            </a>
-            <span className="text-gray-400">|</span>
             <span className="text-gray-600 tracking-wider">CONTACT</span>
             <span className="text-gray-400">|</span>
             <a
@@ -795,12 +809,10 @@ export default function HomePage() {
                 <Linkedin className="h-5 w-5" />
               </a>
               <a
-                href="https://api.whatsapp.com/send?phone=919559314530"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:bajajhriday2005@gmail.com"
                 className="text-gray-400 hover:text-gray-600 transition-colors social-icon"
               >
-                <MessageCircle className="h-5 w-5" />
+                <Mail className="h-5 w-5" />
               </a>
             </div>
           </div>

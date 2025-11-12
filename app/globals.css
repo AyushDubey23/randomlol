@@ -126,7 +126,7 @@
   body {
     @apply bg-background text-foreground;
     /* Clean typography matching Jessie Lee's style */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-weight: 300;
     letter-spacing: 0.025em;
     overflow-x: hidden; /* Fixed horizontal scroll by ensuring no overflow */
@@ -314,4 +314,38 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: translateZ(0); /* avoids filter edge artifacts */
+}
+
+/* Added animation styles for creative loading screen */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
 }
