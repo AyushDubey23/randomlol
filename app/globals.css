@@ -349,3 +349,17 @@
 .animation-delay-1000 {
   animation-delay: 1s;
 }
+
+/* Add creative text fill animation for loading screen */
+.fill-animation {
+  position: relative;
+}
+
+@keyframes colorFill {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}

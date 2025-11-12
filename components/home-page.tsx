@@ -176,14 +176,20 @@ export default function HomePage() {
   }, [currentSection, selectedRole, selectedProject])
 
   useEffect(() => {
+    const initialState = {
+      section: "home",
+      selectedRole: null,
+      selectedProject: null,
+      currentScreenshot: 0,
+    }
+    window.history.replaceState(initialState, "")
+
     const handlePopState = (event: PopStateEvent) => {
-      const state = event.state
-      if (state) {
-        setCurrentSection(state.section || "home")
-        setSelectedRole(state.selectedRole || null)
-        setSelectedProject(state.selectedProject || null)
-        setCurrentScreenshot(state.currentScreenshot || 0)
-      }
+      const state = event.state || initialState
+      setCurrentSection(state.section || "home")
+      setSelectedRole(state.selectedRole || null)
+      setSelectedProject(state.selectedProject || null)
+      setCurrentScreenshot(state.currentScreenshot || 0)
     }
 
     window.addEventListener("popstate", handlePopState)
