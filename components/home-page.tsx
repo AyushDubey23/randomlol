@@ -15,7 +15,8 @@ const roles = [
         image: "/director1.png",
         videoUrl: "https://drive.google.com/file/d/1ONMIidN4gjZ_m0TdjttoKS0Pepdah0V8/view?usp=sharing",
         description:
-          "Issued March, 2025 Adobe Certified Professional in Digital Video Using Adobe Premiere Pro SOFT SKILLS Visual storytelling Decisive and Problem-Solving Leadership Teamwork Communication Design Development Adobe Certified Professional in Visual Effects & Motion Graphics Using Adobe After Effects Issued March, 2025 -A short student documentary exploring the impact of web cookies and digital tracking on everyday users. -The film combines personal data analysis, street interviews, expert insights, and visual evidence to raise awareness about online privacy and data ethics",
+          "-A short student documentary exploring the impact of webcookies and digital tracking on everyday users.-The film combines personal data analysis, street interviews, expert insights,and visual evidence to raise awareness about online privacy and data ethics.
+",
         screenshots: [
           "d31.png",
           "d32.png",
@@ -38,7 +39,7 @@ const roles = [
         image: "/director2.png",
         videoUrl: "https://youtu.be/dQw4w9WgXcQ",
         description:
-          "Scriptwriter- ...Led the creative vision and execution of the episode in a student production, ensuring a cohesive narrative and engaging flow. -Directed talent and crew, managing on-set dynamics for a smooth production. -Oversaw shot composition, pacing, and performance to maintain the show's tone and energy.",
+          "-A short student documentary exploring the impact of web cookies and digital tracking on everyday users. -The film combines personal data analysis, street interviews, expert insights, and visual evidence to raise awareness about online privacy and data ethics. ",
         screenshots: [
           "d21.png",
           "d22.png",
@@ -656,10 +657,10 @@ export default function HomePage() {
             <span className="text-gray-600 tracking-wider">CONTACT</span>
             <span className="text-gray-400">|</span>
             <a
-              href="mailto:hridaybajaj@gmail.com"
+              href="mailto:bajajhriday2005@gmail.com"
               className="text-gray-600 hover:text-black transition-colors tracking-wider"
             >
-              HRIDAYBAJAJ@GMAIL.COM
+              BAJAJHRIDAY2005@GMAIL.COM
             </a>
           </div>
         </div>
