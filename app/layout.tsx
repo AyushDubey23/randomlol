@@ -6,8 +6,11 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Hriday Bajaj',
-  description: 'Hriday Bajaj Portfolio',
+  description: 'Film Student & Filmmaker Portfolio',
   generator: 'ayush dubey lol',
+  icons: {
+    icon: '/logo.png',
+  },
 }
 
 export default function RootLayout({
@@ -17,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className={`font-sans antialiased ${GeistSans.variable} ${GeistMono.variable}`}>
         {children}
         <Analytics />
       </body>
