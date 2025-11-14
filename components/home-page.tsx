@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Menu, X, Instagram, Linkedin, Mail, ChevronLeft, ChevronRight } from "lucide-react"
+import { Menu, X, Instagram, Linkedin, Mail, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 
 const roles = [
@@ -163,7 +163,6 @@ const roles = [
   },
 ]
 
-
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [currentSection, setCurrentSection] = useState("home")
@@ -197,15 +196,13 @@ export default function HomePage() {
   }, [])
 
   const pushState = (section: string, selectedRole: string | null = null, selectedProject: any = null) => {
-    window.history.pushState(
-      {
-        section,
-        selectedRole,
-        selectedProject,
-        currentScreenshot: 0,
-      },
-      "",
-    )
+    const state = {
+      section,
+      selectedRole,
+      selectedProject,
+      currentScreenshot: 0,
+    }
+    window.history.pushState(state, "")
   }
 
   const resetToHome = () => {
@@ -213,7 +210,7 @@ export default function HomePage() {
     setSelectedRole(null)
     setSelectedProject(null)
     setCurrentScreenshot(0)
-    pushState("home")
+    pushState("home", null, null)
   }
 
   const navigateToRole = (role: string) => {
@@ -221,7 +218,7 @@ export default function HomePage() {
     setSelectedProject(null)
     setCurrentSection("home")
     setCurrentScreenshot(0)
-    pushState("home", role)
+    pushState("home", role, null)
   }
 
   const navigateToBio = () => {
@@ -229,7 +226,7 @@ export default function HomePage() {
     setSelectedRole(null)
     setSelectedProject(null)
     setCurrentScreenshot(0)
-    pushState("bio")
+    pushState("bio", null, null)
   }
 
   const handleProjectClick = (project: any) => {
@@ -313,7 +310,7 @@ export default function HomePage() {
             <div
               key={role.title}
               className="relative h-[50vh] bg-gray-100 overflow-hidden group cursor-pointer tile-hover"
-              onClick={() => setSelectedRole(role.title.toLowerCase().replace(/[^a-z]/g, ""))}
+              onClick={() => navigateToRole(role.title.toLowerCase().replace(/[^a-z]/g, ""))}
             >
               <img
                 src={role.image || "/placeholder.svg"}
@@ -355,7 +352,18 @@ export default function HomePage() {
               <Mail className="h-4 w-4" />
             </a>
           </div>
-          <p className="text-center text-xs text-gray-500 tracking-wider">© 2024 Hriday Bajaj. All rights reserved.</p>
+          <p className="text-center text-xs text-gray-500 tracking-wider">© 2025 Hriday Bajaj. All rights reserved.</p>
+          <p className="text-center text-xs text-gray-400 tracking-wider mt-4">
+            Designed & developed by{' '}
+            <a
+              href="https://ayushdubey23.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gray-600 transition-colors"
+            >
+              Ayush Dubey
+            </a>
+          </p>
         </div>
       </footer>
     </div>
@@ -683,6 +691,17 @@ export default function HomePage() {
               BAJAJHRIDAY2005@GMAIL.COM
             </a>
           </div>
+          <p className="text-xs text-gray-400 tracking-wider mt-6">
+            Designed & developed by{' '}
+            <a
+              href="https://ayushdubey23.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gray-600 transition-colors"
+            >
+              Ayush Dubey
+            </a>
+          </p>
         </div>
       </div>
     </div>
