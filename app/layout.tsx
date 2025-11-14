@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: 'Film Student & Filmmaker Portfolio',
   generator: 'ayush dubey lol',
   icons: {
-    icon: '/logo.png',
+    icon: "/logo.png",
   },
 }
 
