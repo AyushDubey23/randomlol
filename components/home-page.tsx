@@ -15,7 +15,7 @@ const roles = [
         image: "/director1.png",
         videoUrl: "https://drive.google.com/file/d/1ONMIidN4gjZ_m0TdjttoKS0Pepdah0V8/view?usp=sharing",
         description:
-          "A short student documentary exploring the impact of web cookies and digital tracking on everyday users. The film combines personal data analysis, street interviews, expert insights, and visual evidence to raise awareness about online privacy and data ethics.",
+                   "Crumbs or Traces is a short student documentary exploring the impact of web cookies and digital tracking on everyday users. The film combines personal data analysis, street interviews, expert insights, and visual evidence to raise awareness about online privacy and data ethics. The idea originated from a moment of curiosity about what really happens after we accept those cookie pop-ups without reading the fine print. Throughout the directorial journey, we engaged with cybersecurity, Information Technology, and Computer Science professors from UCL and Queen Mary University to deepen our understanding of data privacy. The project has been submitted to the Royal Television Society Student Awards, and the process taught me the importance of research, ethics, and clear elocution when engaging with people.",
         screenshots: [
           "d31.png",
           "d32.png",
@@ -38,7 +38,7 @@ const roles = [
         image: "/director2.png",
         videoUrl: "https://drive.google.com/file/d/1yIWB43aChruFhe2tYBcNfDi_h6f_v9bU/view?usp=drive_link",
         description:
-          "A short student documentary exploring the impact of web cookies and digital tracking on everyday users. The film combines personal data analysis, street interviews, expert insights, and visual evidence to raise awareness about online privacy and data ethics.",
+                    "Happy Hours with Ralf is a student-produced live multi-camera talk show set in a bar, capturing the essence of London's after-work culture. The show is hosted by my close friend Ralf Simsolo, with Walid, a talented singer and performer, as our guest. Alongside directing, I also scripted the show. This project was particularly significant for us as it marked our first experience with live recording, combining pre-recorded videotapes and title sequences. The show was broadcast completely unedited, which added both excitement and challenge to the process. Leading a team of twelve taught me valuable lessons in leadership, teamwork, and collaboration. To bring in a lighthearted touch, we also introduced a character for humour in the slapstick and imitation genre. Overall, Happy Hours with Ralf was a rewarding and memorable experience that expanded both my creative and technical abilities.",
         screenshots: [
           "d21.png",
           "d22.png",
@@ -58,7 +58,7 @@ const roles = [
         image: "/director3.png",
         videoUrl: "https://drive.google.com/file/d/1whUopyByAXlyyLgewC594PHKf0z_sSxK/view?usp=drive_link",
         description:
-          "Led a dynamic team of nine individuals, with the unique distinction of being the youngest member among them. Wrote, story boarded and choreographed a story on an existing 1950s song. Executed the entire independent production cycle with efficiency and precision, within an impressive nine-day time frame.",
+          "Babuji Dheere Chalna reimagines the timeless 1954 classic from Aar Paar, a song once sung from the perspective of a bar dancer warning men to be careful in love. I wanted to take that essence and breathe new life into it, to explore what it means to fall in love in today's world. My version follows a young couple on a romantic path, where the girl gently teaches her partner the unspoken rules of love and life. This project holds a special place in my heart. It was the first story that truly came from within me, the first time I felt what it means to create something of my own. I was just 17 then, the youngest in a team of nine very supporting and inspiring individuals, yet every moment on set felt like I was exactly where I was meant to be. We completed the entire production cycle in just 14 days, driven purely by passion, friendship, and belief in the story we wanted to tell. Looking back, Babuji Dheere Chalna was more than just a music video, it was the beginning of my journey as a filmmaker.",
         screenshots: [
           "d11.png",
           "d12.png",
