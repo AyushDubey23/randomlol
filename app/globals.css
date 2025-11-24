@@ -133,6 +133,25 @@
   }
 }
 
+/* Custom minimal scrollbar to match the website aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d4; /* Subtle gray matching the minimal theme */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a3a3a3; /* Slightly darker on hover */
+}
+
 /* Updated hover effects to magnify text and blur background instead of scaling tiles */
 .tile-hover {
   transition: all 0.3s ease;
@@ -316,11 +335,11 @@
   transform: translateZ(0); /* avoids filter edge artifacts */
 }
 
-/* Added animation styles for creative loading screen */
+/* Updated fadeInUp animation for smoother letter reveal */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -362,4 +381,83 @@
   100% {
     clip-path: inset(0 0 0 0);
   }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Cinematic loading screen animations */
+
+/* Letterbox bars sliding in from top */
+@keyframes letterbox-top {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Letterbox bars sliding in from bottom */
+@keyframes letterbox-bottom {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Aperture-inspired reveal from center */
+@keyframes aperture-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Slow cinematic fade-in for text */
+@keyframes cinematicFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle pulsing light flare effect */
+@keyframes lightFlare {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Apply animations */
+.animate-letterbox-top {
+  animation: letterbox-top 1.2s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.animate-letterbox-bottom {
+  animation: letterbox-bottom 1.2s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.animate-aperture-reveal {
+  animation: aperture-reveal 2s cubic-bezier(0.65, 0, 0.35, 1) 0.8s both;
 }

@@ -85,9 +85,9 @@ const roles = [
         category: "SHORT FILM",
         image: "/home2.png",
         videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view?usp=drive_link",
-        description:
-          "Trapped In Reverie - Edited a student short film exploring the concept of lucid dreaming. Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. Also contributed as a gaffer on set, managing lighting to enhance the film's visual narrative.",
-        screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
+        
+ description:
+          "Trapped in Reverie is a student short film exploring the idea of lucid dreaming and the tension between control and subconscious chaos. As the gaffer, designing the dream world inside the studio gave me complete creative freedom. I used deep reds to evoke panic within the dream state and warm oranges paired with practical lamps to add texture and character to the frame. In contrast, for the scenes set in reality, I shifted to a much harsher visual language, using shades and hard shadows to create the feeling of a psychological prison, visually reinforcing the protagonist’s trapped condition.",        screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
       },
     ],
   },
@@ -100,9 +100,8 @@ const roles = [
         category: "SHORT FILM",
         image: "/home21.png",
         videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view?usp=drive_link",
-        description:
-          "Trapped In Reverie - Edited a student short film exploring the concept of lucid dreaming. Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. Also contributed as a gaffer on set, managing lighting to enhance the film's visual narrative.",
-        screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
+ description:
+          "Trapped in Reverie is a student short film exploring the idea of lucid dreaming and the tension between control and subconscious chaos. As the gaffer, designing the dream world inside the studio gave me complete creative freedom. I used deep reds to evoke panic within the dream state and warm oranges paired with practical lamps to add texture and character to the frame. In contrast, for the scenes set in reality, I shifted to a much harsher visual language, using shades and hard shadows to create the feeling of a psychological prison, visually reinforcing the protagonist’s trapped condition.",        screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
       },
     ],
   },
@@ -115,9 +114,9 @@ const roles = [
         category: "SHORT FILM",
         image: "/home3.png",
         videoUrl: "https://drive.google.com/file/d/11ZgkeQhRW4AI28kGxSfo-MQwx-i-6zhZ/view?usp=sharing",
-        description:
-          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
-        screenshots: ["p.png", "p2.png", "p3.png", "p5.png", "p6.png", "p7.png"],
+               description:
+          "American Beauty is a short student film focused on the experiences and expression of the trans community in America. The film aims to highlight themes of identity, visibility, and self-acceptance through a stylised yet honest portrayal of identity and visibility. As the producer, I led the project from development through production, managing schedules, locations, budgeting, crew coordination, and on-set organisation. A key part of my role was creating a supportive environment where the director had full creative freedom to shape the narrative and visual style. I ensured that all logistical elements aligned with their vision, enabling them to focus purely on storytelling. During the shoot, I handled day-to-day problem-solving, time management, and communication across departments, skills that helped keep the production efficient and cohesive. This project strengthened my ability to balance artistic ambition with practical execution, and reinforced my interest in producing stories that explore underrepresented communities with sensitivity and care.",
+              screenshots: ["p.png", "p2.png", "p3.png", "p5.png", "p6.png", "p7.png"],
       },
     ],
   },
@@ -131,8 +130,8 @@ const roles = [
         image: "/home4.jpeg",
         videoUrl: "https://www.youtube.com/watch?v=2JGmAgjSktk",
         description:
-          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
-        screenshots: ["s.png", "s2.png", "s3.png", "s5.png", "s6.png", "s7.png", "s8.png", "s9.png", "s10.png"],
+          "Cocaine Toilet is a comedy student film about three friends who end up fighting over a packet of cocaine during a child's birthday party. Working as the sound designer on this project taught me the four essential pillars of sound: music, effects, ambience, and silence. I learned how to use each of these tools with intention, understanding not only when to apply them but also how long to hold a moment to shape mood, tension, or comedy. This project showed me how powerful sound design can be in elevating storytelling and adding depth to even the most chaotic or humorous scenes.",
+          screenshots: ["s.png", "s2.png", "s3.png", "s5.png", "s6.png", "s7.png", "s8.png", "s9.png", "s10.png"],
       },
     ],
   },
@@ -146,8 +145,7 @@ const roles = [
         image: "/home5.png",
         videoUrl: "https://www.youtube.com/watch?v=sGkA3N5AHv4",
         description:
-          "Trapped In Reverie -Edited a student short film exploring the concept of lucid dreaming. -Assisted in colour grading using DaVinci Resolve, worked on sound design in Avid Pro Tools, and edited the film in Adobe Premiere Pro. -Also contributed as a gaffer on set, managing lighting to enhance the film’s visual narrative.",
-        screenshots: ["o.png", "o2.png", "o3.png", "o5.png", "o6.png", "o7.png", "o8.png", "o9.png", "o10.png"],
+          "Narcissus and Echo is a short student film that modernises the classic Greek myth to explore contemporary social commentary on this generation’s narcissism and the impact of social media. As the sound operator on the film, I learned both the discipline and ethics of sound recording, alongside the technical skills required for professional production. Capturing room tones, booming microphones during moving shots, concealing microphones out of frame, and monitoring shadows may seem basic, but mastering these fundamentals was an essential part of my learning journey. This project reinforced how critical careful sound recording is to storytelling and the overall cinematic experience.",        screenshots: ["o.png", "o2.png", "o3.png", "o5.png", "o6.png", "o7.png", "o8.png", "o9.png", "o10.png"],
       },
     ],
   },
@@ -287,10 +285,10 @@ export default function HomePage() {
             onClick={resetToHome}
             onKeyDown={(e) => e.key === "Enter" && resetToHome()}
             aria-label="Go to Home"
-            className="cursor-pointer select-none outline-none"
+           className="cursor-pointer select-none outline-none flex flex-col items-start text-left"
           >
             <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
-            <p className="text-xs text-gray-600 tracking-[0.15em] mt-1">FILM STUDENT</p>
+            <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
           </div>
 
           <Button
@@ -354,7 +352,7 @@ export default function HomePage() {
           </div>
           <p className="text-center text-xs text-gray-500 tracking-wider">© 2025 Hriday Bajaj. All rights reserved.</p>
           <p className="text-center text-xs text-gray-400 tracking-wider mt-4">
-            Designed & developed by{' '}
+            Designed & developed by{" "}
             <a
               href="https://ayushdubey23.vercel.app/"
               target="_blank"
@@ -379,9 +377,16 @@ export default function HomePage() {
         <div className="min-h-screen bg-background overflow-x-hidden no-blur">
           <header className="fixed top-0 left-0 right-0 z-40 bg-background">
             <div className="container mx-auto px-6 py-6 flex items-center justify-between">
-              <div>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={resetToHome}
+                onKeyDown={(e) => e.key === "Enter" && resetToHome()}
+                aria-label="Go to Home"
+                className="cursor-pointer select-none outline-none flex flex-col items-start text-left"
+              >
                 <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
-                <p className="text-xs text-gray-600 tracking-[0.15em] mt-1">FILM STUDENT</p>
+                <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
               </div>
               <Button
                 variant="ghost"
@@ -425,9 +430,16 @@ export default function HomePage() {
       <div className="min-h-screen bg-background overflow-x-hidden">
         <header className="fixed top-0 left-0 right-0 z-40 bg-background">
           <div className="container mx-auto px-6 py-6 flex items-center justify-between">
-            <div>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={resetToHome}
+              onKeyDown={(e) => e.key === "Enter" && resetToHome()}
+              aria-label="Go to Home"
+              className="cursor-pointer select-none outline-none flex flex-col items-start text-left"
+            >
               <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
-              <p className="text-xs text-gray-600 tracking-[0.15em] mt-1">FILM STUDENT</p>
+              <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
             </div>
 
             <Button
@@ -488,9 +500,16 @@ export default function HomePage() {
       <div className="min-h-screen bg-background overflow-x-hidden">
         <header className="fixed top-0 left-0 right-0 z-40 bg-background">
           <div className="container mx-auto px-6 py-6 flex items-center justify-between">
-            <div>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={resetToHome}
+              onKeyDown={(e) => e.key === "Enter" && resetToHome()}
+              aria-label="Go to Home"
+              className="cursor-pointer select-none outline-none flex flex-col items-start text-left"
+            >
               <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
-              <p className="text-xs text-gray-600 tracking-[0.15em] mt-1">FILM STUDENT</p>
+              <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
             </div>
 
             <Button
@@ -611,9 +630,16 @@ export default function HomePage() {
     <div className="min-h-screen bg-background overflow-x-hidden">
       <header className="fixed top-0 left-0 right-0 z-40 bg-background">
         <div className="container mx-auto px-6 py-6 flex items-center justify-between">
-          <div>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={resetToHome}
+            onKeyDown={(e) => e.key === "Enter" && resetToHome()}
+            aria-label="Go to Home"
+            className="cursor-pointer select-none outline-none flex flex-col items-start text-left"
+          >
             <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
-            <p className="text-xs text-gray-600 tracking-[0.15em] mt-1">FILM STUDENT</p>
+            <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
           </div>
 
           <Button
@@ -692,7 +718,7 @@ export default function HomePage() {
             </a>
           </div>
           <p className="text-xs text-gray-400 tracking-wider mt-6">
-            Designed & developed by{' '}
+            Designed & developed by{" "}
             <a
               href="https://ayushdubey23.vercel.app/"
               target="_blank"
