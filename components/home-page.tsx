@@ -88,7 +88,7 @@ const roles = [
         
  description:
                     "Trapped in Reverie is a student short film exploring the idea of lucid dreaming and the tension between control and subconscious chaos.I served as the gaffer, editor, and also handled key responsibilities as the Digital Imaging Technician (DIT).-As the gaffer, designing the dream world inside the studio gave me complete creative freedom. I used deep reds to evoke panic within the dream state and warm oranges paired with practical lamps to add texture and character to the frame. In contrast, for the scenes set in reality, I shifted to a much harsher visual language, using shades and hard shadows to create the feeling of a psychological prison, visually reinforcing the protagonist’s trapped condition.-As the editor, the film relied heavily on precise pacing, clean transitions, and tight continuity, giving me the opportunity to refine my narrative timing and problem solving skills in post production. Balancing the surreal rhythm of the dream sequences with the grounded tone of reality strengthened my ability to use editing as an emotional tool.-Working as a DIT on set also taught me the importance of proper data management, visual continuity, and maintaining a smooth workflow between the camera department and post production.",        
-   screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
+   screenshots: ["e1.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
       },
     ],
   },
@@ -103,7 +103,7 @@ const roles = [
         videoUrl: "https://drive.google.com/file/d/1WfxsnzBPR3S1jXdgoCUkfCA3VGWuh-mw/view?usp=drive_link",
  description:
           "Trapped in Reverie is a student short film exploring the idea of lucid dreaming and the tension between control and subconscious chaos.I served as the gaffer, editor, and also handled key responsibilities as the Digital Imaging Technician (DIT).-As the gaffer, designing the dream world inside the studio gave me complete creative freedom. I used deep reds to evoke panic within the dream state and warm oranges paired with practical lamps to add texture and character to the frame. In contrast, for the scenes set in reality, I shifted to a much harsher visual language, using shades and hard shadows to create the feeling of a psychological prison, visually reinforcing the protagonist’s trapped condition.-As the editor, the film relied heavily on precise pacing, clean transitions, and tight continuity, giving me the opportunity to refine my narrative timing and problem solving skills in post production. Balancing the surreal rhythm of the dream sequences with the grounded tone of reality strengthened my ability to use editing as an emotional tool.-Working as a DIT on set also taught me the importance of proper data management, visual continuity, and maintaining a smooth workflow between the camera department and post production.",        
-screenshots: ["e.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
+screenshots: ["e1.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.png", "e9.png", "e10.png"],
       },
     ],
   },
