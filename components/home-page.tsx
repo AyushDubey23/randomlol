@@ -299,7 +299,7 @@ export default function HomePage() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="hover:bg-transparent hamburger-icon"
           >
-            <Menu className="h-5 w-5 text-black" />
+            <Menu className="h-9 w-9 text-black" />
           </Button>
         </div>
       </header>
