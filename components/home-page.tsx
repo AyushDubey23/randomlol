@@ -293,17 +293,15 @@ export default function HomePage() {
             <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
           </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="hover:bg-transparent hamburger-icon"
-          >
-            <Menu className="h-9 w-9 text-black" />
-          </Button>
-        </div>
-      </header>
-
+              <Button
+                variant="ghost"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="hover:bg-transparent hamburger-icon p-0 w-12 h-12"
+              >
+                <Menu className="size-8 text-black" strokeWidth={1.5} />
+              </Button>
+            </div>
+          </header>
       <div className="pt-20">
         <div className="space-y-6 px-0">
           {roles.map((role, index) => (
@@ -440,18 +438,16 @@ export default function HomePage() {
             >
               <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
               <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
+              </div>
+              <Button
+                variant="ghost"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="hover:bg-transparent hamburger-icon p-0 w-12 h-12"
+              >
+                <Menu className="size-8 text-black" strokeWidth={1.5} />
+              </Button>
             </div>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="hover:bg-transparent hamburger-icon"
-            >
-              <Menu className="h-5 w-5 text-black" />
-            </Button>
-          </div>
-        </header>
+          </header>
 
         <div className="pt-24 pb-16">
           <div className="px-0">
@@ -510,16 +506,15 @@ export default function HomePage() {
             >
               <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
               <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
-            </div>
+              </div>
+              <Button
+                variant="ghost"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="hover:bg-transparent hamburger-icon p-0 w-12 h-12"
+              >
+                <Menu className="size-8 text-black" strokeWidth={1.5} />
+              </Button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="hover:bg-transparent hamburger-icon"
-            >
-              <Menu className="h-5 w-5 text-black" />
-            </Button>
           </div>
         </header>
 
@@ -640,18 +635,16 @@ export default function HomePage() {
           >
             <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
             <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
-          </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="hover:bg-transparent hamburger-icon"
-          >
-            <Menu className="h-5 w-5 text-black" />
-          </Button>
-        </div>
-      </header>
+              </div>
+              <Button
+                variant="ghost"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="hover:bg-transparent hamburger-icon p-0 w-12 h-12"
+              >
+                <Menu className="size-8 text-black" strokeWidth={1.5} />
+              </Button>
+            </div>
+          </header>
 
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-6">
@@ -739,11 +732,10 @@ export default function HomePage() {
         <div className="fixed inset-0 z-50 bg-background menu-overlay">
           <Button
             variant="ghost"
-            size="icon"
             onClick={() => setIsMenuOpen(false)}
-            className="absolute top-6 right-6 hover:bg-transparent hamburger-icon"
+            className="absolute top-6 right-6 hover:bg-transparent hamburger-icon p-0 w-12 h-12"
           >
-            <X className="h-5 w-5 text-black" />
+            <X className="h-7 w-7 text-black" />
           </Button>
 
           <div className="menu-content">
