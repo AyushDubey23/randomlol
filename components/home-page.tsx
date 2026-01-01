@@ -28,7 +28,7 @@ const roles = [
           "d40.png",
           "d311.png",
           "d312.png",
-          "d331.png",
+          "d313.png",
           "d314.png",
         ],
       },
