@@ -124,7 +124,7 @@ screenshots: ["e1.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.pn
   },
   {
     title: "WRITER",
-    image: "/home3.png",
+    image: "/W.png",
     projects: [
       {
         title: "AMY",
