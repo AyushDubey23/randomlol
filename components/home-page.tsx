@@ -123,6 +123,23 @@ screenshots: ["e1.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.pn
     ],
   },
   {
+    title: "WRITER",
+    image: "/home3.png",
+    projects: [
+      {
+        title: "AMY",
+        category: "SHORT FILM",
+        image: "/W.png",
+        videoUrl: "https://www.youtube.com/watch?v=pBq0c1OJWWU",
+               description:
+          "American Beauty is a short student film focused on the experiences and expression of the trans community in America. The film aims to highlight themes of identity, visibility, and self acceptance through a stylised yet honest portrayal of identity and visibility.-As the producer, I led the project from development through production, managing schedules, locations, budgeting, crew coordination, and on set organisation. A key part of my role was creating a supportive environment where the director had full creative freedom to shape the narrative and visual style. I ensured that all logistical elements aligned with their vision, enabling them to focus purely on storytelling.-During the shoot, I handled day to day problem solving, time management, and communication across departments, skills that helped keep the production efficient and cohesive. This project strengthened my ability to balance artistic ambition with practical execution, and reinforced my interest in producing stories that explore underrepresented communities with sensitivity and care.",
+              screenshots: ["W.png", "W2.png", "W3.png", "W5.png", "W6.png", "W7.png","W8.png", "W9.png", "W10.png","W11.png", "W12.png", "W13.png", "W14.png", "W15.png", "W16.png", "W17.png"
+              
+              ],
+      },
+    ],
+  },
+  {
     title: "SOUND DESIGNER",
     image: "/home4.jpeg",
     projects: [
@@ -679,16 +696,16 @@ export default function HomePage() {
                 dedicated film student.
               </p>
 
-              <div className="mt-8">
-                <a
-                  href="/HridayBajajResume.pdf"
-                  download="Hriday_Bajaj_Resume.pdf"
-                  className="inline-block px-6 py-3 bg-black text-white text-xs tracking-wider hover:bg-gray-800 transition-colors hover-scale"
-                >
-                  RESUME
-                </a>
-              </div>
-
+<div className="mt-8">
+  <a
+    href="https://drive.google.com/file/d/1JwsGFUmmTOSD9G7igF8jpsDqWK4LF-y2/view?usp=sharing"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-block px-6 py-3 bg-black text-white text-xs tracking-wider hover:bg-gray-800 transition-colors hover-scale"
+  >
+    RESUME
+  </a>
+</div>
               <p className="text-xs text-gray-500 mt-8">
                 {" "}
                 <a href="#" className="underline"></a>
