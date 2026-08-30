@@ -11,7 +11,12 @@ export const metadata: Metadata = {
   creator: 'Ayush Dubey',
   publisher: 'Ayush Dubey',
   icons: {
-    icon: "/logo.png",
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   },
 }
 
