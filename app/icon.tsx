@@ -12,7 +12,7 @@ export default function Icon() {
     (
       <div
         style={{
-          fontSize: 20,
+          fontSize: 22,
           background: '#fafafa',
           width: '100%',
           height: '100%',
@@ -20,7 +20,7 @@ export default function Icon() {
           alignItems: 'center',
           justifyContent: 'center',
           color: '#000000',
-          fontWeight: 300,
+          fontWeight: 700,
           fontFamily: 'sans-serif',
         }}
       >
