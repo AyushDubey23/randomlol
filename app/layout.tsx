@@ -7,7 +7,9 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Hriday Bajaj',
   description: 'Film Student & Filmmaker Portfolio',
-  generator: 'ayush dubey lol',
+  authors: [{ name: 'Ayush Dubey', url: 'https://ayushdubey23.vercel.app/' }],
+  creator: 'Ayush Dubey',
+  publisher: 'Ayush Dubey',
   icons: {
     icon: "/logo.png",
   },
