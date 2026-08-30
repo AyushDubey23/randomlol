@@ -410,7 +410,12 @@ export default function HomePage() {
     if (!role) return null
 
     if (roleTitle === "photographer") {
-      const photos = ["/photo1.png", "/photo2.png", "/photo3.png", "/photo4.png"]
+      const photos = [
+        { webp: "/photo1.webp", jpg: "/photo1.jpg", alt: "Photography 1" },
+        { webp: "/photo2.webp", jpg: "/photo2.jpg", alt: "Photography 2" },
+        { webp: "/photo3.webp", jpg: "/photo3.jpg", alt: "Photography 3" },
+        { webp: "/photo4.webp", jpg: "/photo4.jpg", alt: "Photography 4" },
+      ]
       return (
         <div className="min-h-screen bg-background overflow-x-hidden no-blur">
           <header className="fixed top-0 left-0 right-0 z-40 bg-background">
@@ -426,24 +431,32 @@ export default function HomePage() {
                 <h1 className="text-2xl font-light tracking-[0.2em] text-black">HRIDAY BAJAJ</h1>
                 <p className="text-xs text-gray-600 tracking-[0.15em] mt-1 pl-[2px]">FILMMAKER</p>
               </div>
-          <Button
-            variant="ghost"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="hover:bg-transparent hamburger-icon p-0 w-12 h-12"
-          >
-            <Menu className="size-8 text-black" strokeWidth={1.5} />
-          </Button>
-        </div>
-      </header>
-          <div className="pt-24">
-            <div className="space-y-0">
-              {photos.map((src, i) => (
-                <div key={i} className="relative h-screen overflow-hidden">
-                  <img
-                    src={src || "/placeholder.svg"}
-                    alt={`Photography ${i + 1}`}
-                    className="w-full h-full object-cover photography-img"
-                  />
+              <Button
+                variant="ghost"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="hover:bg-transparent hamburger-icon p-0 w-12 h-12"
+              >
+                <Menu className="size-8 text-black" strokeWidth={1.5} />
+              </Button>
+            </div>
+          </header>
+          <div className="pt-24 pb-12">
+            <div className="space-y-4 md:space-y-8 max-w-6xl mx-auto px-2 sm:px-4 md:px-6">
+              {photos.map((photo, i) => (
+                <div
+                  key={i}
+                  className="relative w-full rounded-none overflow-hidden bg-black/95 flex items-center justify-center py-2 sm:py-4 md:py-0 min-h-[50vh] sm:min-h-[70vh] md:min-h-screen"
+                >
+                  <picture className="w-full h-full flex items-center justify-center">
+                    <source srcSet={photo.webp} type="image/webp" />
+                    <img
+                      src={photo.jpg}
+                      alt={photo.alt}
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      className="w-full max-h-[80vh] sm:max-h-[88vh] object-contain photography-img transition-opacity duration-300"
+                    />
+                  </picture>
                 </div>
               ))}
             </div>
