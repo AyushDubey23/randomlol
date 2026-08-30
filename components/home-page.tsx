@@ -131,11 +131,26 @@ screenshots: ["e1.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.pn
         category: "SHORT FILM",
         image: "/W.png",
         videoUrl: "https://www.youtube.com/watch?v=pBq0c1OJWWU",
-               description:
-          "American Beauty is a short student film focused on the experiences and expression of the trans community in America. The film aims to highlight themes of identity, visibility, and self acceptance through a stylised yet honest portrayal of identity and visibility.-As the producer, I led the project from development through production, managing schedules, locations, budgeting, crew coordination, and on set organisation. A key part of my role was creating a supportive environment where the director had full creative freedom to shape the narrative and visual style. I ensured that all logistical elements aligned with their vision, enabling them to focus purely on storytelling.-During the shoot, I handled day to day problem solving, time management, and communication across departments, skills that helped keep the production efficient and cohesive. This project strengthened my ability to balance artistic ambition with practical execution, and reinforced my interest in producing stories that explore underrepresented communities with sensitivity and care.",
-              screenshots: ["W.png", "W2.png", "W3.png", "W5.png", "W6.png", "W7.png","W8.png", "W9.png", "W10.png","W11.png", "W12.png", "W13.png", "W14.png", "W15.png", "W16.png", "W17.png"
-              
-              ],
+        description:
+          "When Amy asks her best friend Elizabeth to attend a blind date in her place, what begins as a harmless favour leads to an unexpected connection. As Elizabeth and the mysterious \"Edward\" grow closer, the deception becomes increasingly difficult to maintain. When the truth is finally revealed, both are forced to confront the lies that brought them together and question whether a relationship built on false identities can still be genuine. Exploring themes of identity, authenticity, and modern dating, Amy is a character-driven romantic drama about finding real connection in a world shaped by digital personas.",
+        screenshots: [
+          "W.png",
+          "W2.png",
+          "W3.png",
+          "W5.png",
+          "W6.png",
+          "W7.png",
+          "W8.png",
+          "W9.png",
+          "W10.png",
+          "W11.png",
+          "W12.png",
+          "W13.png",
+          "W14.png",
+          "W15.png",
+          "W16.png",
+          "W17.png",
+        ],
       },
     ],
   },
@@ -254,10 +269,16 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    if (selectedProject && selectedProject.screenshots) {
+    if (selectedProject && selectedProject.screenshots && selectedProject.screenshots.length > 0) {
+      // Preload all project screenshots into memory immediately
+      selectedProject.screenshots.forEach((src: string) => {
+        const img = new Image()
+        img.src = `/${src}`
+      })
+
       const interval = setInterval(() => {
         setCurrentScreenshot((prev) => (prev + 1) % selectedProject.screenshots.length)
-      }, 3000)
+      }, 3500)
       return () => clearInterval(interval)
     }
   }, [selectedProject])
@@ -559,13 +580,19 @@ export default function HomePage() {
 
               <div className="space-y-4">
                 <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                  <img
-                    src={`/${project.screenshots[currentScreenshot]}`}
-                    alt={`${project.title} screenshot ${currentScreenshot + 1}`}
-                    className="w-full h-full object-cover"
-                  />
+                  {project.screenshots.map((src: string, index: number) => (
+                    <img
+                      key={src + index}
+                      src={`/${src}`}
+                      alt={`${project.title} screenshot ${index + 1}`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
+                        index === currentScreenshot ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+                      }`}
+                      loading="eager"
+                    />
+                  ))}
 
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
                     {project.screenshots.map((_: any, index: number) => (
                       <button
                         key={index}
@@ -581,14 +608,14 @@ export default function HomePage() {
                     onClick={() =>
                       setCurrentScreenshot((prev) => (prev === 0 ? project.screenshots.length - 1 : prev - 1))
                     }
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-20"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </button>
 
                   <button
                     onClick={() => setCurrentScreenshot((prev) => (prev + 1) % project.screenshots.length)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-20"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </button>
@@ -756,24 +783,24 @@ export default function HomePage() {
           </Button>
 
           <div className="menu-content">
-            <div className="text-center space-y-6">
+            <div className="text-center space-y-3 sm:space-y-4 md:space-y-5 w-full">
               <button
                 onClick={() => {
                   resetToHome()
                   setIsMenuOpen(false)
                 }}
-                className="block text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Home
               </button>
-              <div className="w-12 h-px bg-black mx-auto"></div>
+              <div className="w-12 h-px bg-black mx-auto my-2"></div>
 
               <button
                 onClick={() => {
                   navigateToRole("director")
                   setIsMenuOpen(false)
                 }}
-                className="block text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Director
               </button>
@@ -783,7 +810,7 @@ export default function HomePage() {
                   navigateToRole("editor")
                   setIsMenuOpen(false)
                 }}
-                className="block text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Editor
               </button>
@@ -793,7 +820,7 @@ export default function HomePage() {
                   navigateToRole("gaffer")
                   setIsMenuOpen(false)
                 }}
-                className="block text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Gaffer
               </button>
@@ -803,9 +830,19 @@ export default function HomePage() {
                   navigateToRole("producer")
                   setIsMenuOpen(false)
                 }}
-                className="block text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Producer
+              </button>
+
+              <button
+                onClick={() => {
+                  navigateToRole("writer")
+                  setIsMenuOpen(false)
+                }}
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+              >
+                Writer
               </button>
 
               <button
@@ -813,7 +850,7 @@ export default function HomePage() {
                   navigateToRole("sounddesigner")
                   setIsMenuOpen(false)
                 }}
-                className="block text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Sound Designer
               </button>
@@ -823,7 +860,7 @@ export default function HomePage() {
                   navigateToRole("soundoperator")
                   setIsMenuOpen(false)
                 }}
-                className="block text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Sound Operator
               </button>
@@ -833,7 +870,7 @@ export default function HomePage() {
                   navigateToRole("photographer")
                   setIsMenuOpen(false)
                 }}
-                className="block text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Photographer
               </button>
@@ -843,7 +880,7 @@ export default function HomePage() {
                   navigateToBio()
                   setIsMenuOpen(false)
                 }}
-                className="block text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Bio | Contact
               </button>

@@ -1,69 +1,64 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0)
+  const [isFadingOut, setIsFadingOut] = useState(false)
+  const onCompleteRef = useRef(onComplete)
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(timer)
-          setTimeout(onComplete, 800)
-          return 100
-        }
-        return prev + Math.random() * 20
-      })
-    }, 400)
-
-    return () => clearInterval(timer)
+    onCompleteRef.current = onComplete
   }, [onComplete])
 
+  useEffect(() => {
+    const startTime = Date.now()
+    const duration = 1000 // 1 second clean loading progress
+    let completed = false
+
+    const timer = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      const currentProgress = Math.min(Math.floor((elapsed / duration) * 100), 100)
+
+      setProgress(currentProgress)
+
+      if (currentProgress >= 100 && !completed) {
+        completed = true
+        clearInterval(timer)
+        setIsFadingOut(true)
+        setTimeout(() => {
+          onCompleteRef.current()
+        }, 400)
+      }
+    }, 16)
+
+    return () => clearInterval(timer)
+  }, [])
+
   return (
-    <div className="fixed inset-0 bg-black flex items-center justify-center z-50 overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNhKSIvPjwvc3ZnPg==')]" />
-
-      <div className="absolute top-0 left-0 right-0 h-16 md:h-24 bg-black animate-letterbox-top" />
-      <div className="absolute bottom-0 left-0 right-0 h-16 md:h-24 bg-black animate-letterbox-bottom" />
-
-      <div className="flex flex-col items-center justify-center space-y-12 animate-aperture-reveal">
-        <div className="text-center space-y-6">
-          <h1
-            className="text-5xl md:text-7xl font-light tracking-[0.2em] text-white uppercase"
-            style={{
-              fontFamily: "var(--font-geist-sans)",
-              animation: "cinematicFadeIn 1.8s ease-out 0.5s both",
-            }}
-          >
+    <div
+      className={`fixed inset-0 z-50 bg-[#fafafa] flex flex-col items-center justify-center transition-opacity duration-400 ease-in-out ${
+        isFadingOut ? "opacity-0 pointer-events-none" : "opacity-100"
+      }`}
+    >
+      <div className="flex flex-col items-center text-center px-4 space-y-8">
+        <div>
+          <h1 className="text-3xl md:text-5xl font-light tracking-[0.25em] text-black uppercase select-none">
             HRIDAY BAJAJ
           </h1>
         </div>
 
-        <div
-          className="w-48 md:w-64 relative"
-          style={{
-            animation: "cinematicFadeIn 1.8s ease-out 1.5s both",
-          }}
-        >
-          <div className="h-[1px] bg-white/20 overflow-hidden">
+        {/* Minimal black loading bar */}
+        <div className="w-40 md:w-52">
+          <div className="h-[2px] w-full bg-black/10 overflow-hidden rounded-full">
             <div
-              className="h-full bg-white/60 transition-all duration-500 ease-out"
-              style={{
-                width: `${progress}%`,
-              }}
+              className="h-full bg-black transition-all duration-75 ease-out"
+              style={{ width: `${progress}%` }}
             />
           </div>
         </div>
       </div>
-
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%)",
-          animation: "lightFlare 3s ease-in-out infinite",
-        }}
-      />
     </div>
   )
 }
+
