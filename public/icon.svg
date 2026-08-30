@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <rect width="512" height="512" fill="#fafafa"/>
-  <text x="50%" y="53%" dominant-baseline="middle" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="700" font-size="340" fill="#000000">H</text>
+  <g fill="#000000">
+    <rect x="156" y="126" width="52" height="260" rx="4"/>
+    <rect x="304" y="126" width="52" height="260" rx="4"/>
+    <rect x="156" y="230" width="200" height="52"/>
+  </g>
 </svg>

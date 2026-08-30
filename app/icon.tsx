@@ -12,19 +12,21 @@ export default function Icon() {
     (
       <div
         style={{
-          fontSize: 22,
           background: '#fafafa',
           width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#000000',
-          fontWeight: 700,
-          fontFamily: 'sans-serif',
         }}
       >
-        H
+        <svg viewBox="0 0 512 512" width="32" height="32">
+          <g fill="#000000">
+            <rect x="156" y="126" width="52" height="260" rx="4"/>
+            <rect x="304" y="126" width="52" height="260" rx="4"/>
+            <rect x="156" y="230" width="200" height="52"/>
+          </g>
+        </svg>
       </div>
     ),
     {
