@@ -399,16 +399,25 @@ export default function AnalyticsViewPage() {
             </p>
           </div>
 
-          <div className="flex items-center space-x-4 shrink-0">
+          <div className="flex items-center space-x-3 shrink-0">
+            <span className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+              {rememberDeviceState ? "ON" : "OFF"}
+            </span>
             <button
+              type="button"
+              role="switch"
+              aria-checked={rememberDeviceState}
               onClick={handleToggleRemember}
-              className={`px-4 py-2 border text-xs font-mono uppercase tracking-[0.2em] transition-all cursor-pointer ${
-                rememberDeviceState
-                  ? "border-neutral-400 bg-white text-black font-semibold"
-                  : "border-neutral-700 bg-neutral-900 text-neutral-400 hover:text-white"
+              className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full p-0.5 transition-colors duration-300 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 border border-transparent ${
+                rememberDeviceState ? "bg-[#34C759]" : "bg-neutral-800 border-neutral-700/60"
               }`}
             >
-              {rememberDeviceState ? "[ ON ]" : "[ OFF ]"}
+              <span className="sr-only">Toggle remember device</span>
+              <span
+                className={`pointer-events-none inline-block size-6 transform rounded-full bg-white shadow-md ring-0 transition duration-300 ease-in-out ${
+                  rememberDeviceState ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
             </button>
           </div>
         </section>
