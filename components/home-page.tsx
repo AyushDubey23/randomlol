@@ -340,8 +340,18 @@ export default function HomePage() {
               </Button>
             </div>
           </header>
+
+      {/* Accessible semantic description for search engines and screen readers */}
+      <div className="sr-only">
+        <h2>About Hriday Bajaj</h2>
+        <p>
+          Hriday Bajaj is an Indian filmmaker, director, and editor based in London.
+          Explore his creative portfolio featuring short films, documentaries, music videos, and visual storytelling.
+        </p>
+      </div>
+
       <div className="pt-20">
-        <div className="space-y-6 px-0">
+        <div className="space-y-6 px-0" data-nosnippet>
           {roles.map((role, index) => (
             <div
               key={role.title}
@@ -362,7 +372,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <footer className="py-8 bg-background">
+      <footer className="py-8 bg-background" data-nosnippet>
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-center space-x-8 mb-4">
             <a
@@ -755,7 +765,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="border-t border-gray-200 py-8">
+      <div className="border-t border-gray-200 py-8" data-nosnippet>
         <div className="container mx-auto px-6 text-center">
           <div className="flex items-center space-x-8 text-sm">
             <span className="text-gray-600 tracking-wider">CONTACT</span>
