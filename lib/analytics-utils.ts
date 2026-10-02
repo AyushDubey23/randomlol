@@ -6,6 +6,7 @@
 
 export const STORAGE_KEY_DEVICE_ID = "hriday_analytics_device_id";
 export const STORAGE_KEY_REMEMBER = "hriday_analytics_remember";
+export const STORAGE_KEY_EXCLUDE_ADMIN = "hriday_analytics_exclude_admin";
 export const SESSION_KEY_DEVICE_ID = "hriday_analytics_session_device_id";
 
 /**
@@ -98,21 +99,36 @@ export function formatFullDate(dateStr: string): string {
  * Checks whether device remembering is currently enabled on this browser
  */
 export function isDeviceRemembered(): boolean {
-  if (typeof window === "undefined") return true;
+  if (typeof window === "undefined") return false;
   try {
     const value = localStorage.getItem(STORAGE_KEY_REMEMBER);
-    return value !== "false";
+    return value === "true";
   } catch {
-    return true;
+    return false;
   }
 }
 
 /**
- * Retrieves or initializes the anonymous device ID based on the remember setting.
+ * Checks whether this device should be excluded from view counting
+ */
+export function isDeviceExcluded(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return (
+      localStorage.getItem(STORAGE_KEY_REMEMBER) === "true" ||
+      localStorage.getItem(STORAGE_KEY_EXCLUDE_ADMIN) === "true"
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Retrieves or initializes the anonymous device ID.
  */
 export function getOrCreateAnonymousDeviceId(): { deviceId: string; remember: boolean } {
   if (typeof window === "undefined") {
-    return { deviceId: "server", remember: true };
+    return { deviceId: "server", remember: false };
   }
 
   const remember = isDeviceRemembered();
@@ -130,7 +146,7 @@ export function getOrCreateAnonymousDeviceId(): { deviceId: string; remember: bo
       try {
         localStorage.setItem(STORAGE_KEY_DEVICE_ID, deviceId);
       } catch {
-        // storage disabled or quota exceeded
+        // ignore
       }
     }
     return { deviceId, remember: true };
@@ -163,20 +179,20 @@ export function setRememberDevice(enabled: boolean): void {
   try {
     if (enabled) {
       localStorage.setItem(STORAGE_KEY_REMEMBER, "true");
+      localStorage.setItem(STORAGE_KEY_EXCLUDE_ADMIN, "true");
       let deviceId = localStorage.getItem(STORAGE_KEY_DEVICE_ID);
       if (!deviceId) {
-        // promote session ID if existing, otherwise generate fresh
         const sessionDevice = sessionStorage.getItem(SESSION_KEY_DEVICE_ID);
         deviceId = sessionDevice || generateUUID();
         localStorage.setItem(STORAGE_KEY_DEVICE_ID, deviceId);
       }
     } else {
       localStorage.setItem(STORAGE_KEY_REMEMBER, "false");
+      localStorage.removeItem(STORAGE_KEY_EXCLUDE_ADMIN);
       localStorage.removeItem(STORAGE_KEY_DEVICE_ID);
-      // Generate a temporary session device ID so this session remains stable
       sessionStorage.setItem(SESSION_KEY_DEVICE_ID, generateUUID());
     }
   } catch {
-    // ignore storage access errors
+    // ignore
   }
 }

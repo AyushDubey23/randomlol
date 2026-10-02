@@ -165,8 +165,8 @@ export default function AnalyticsViewPage() {
     setRememberDeviceState(nextState);
     setRememberNotice(
       nextState
-        ? "Device will be remembered across sessions as a unique visitor."
-        : "Device memory cleared. Next visit will be treated as a fresh session."
+        ? "Remember this device is ON. Views from this device will not be counted."
+        : "Remember this device is OFF. Future visits from this device will be counted as views."
     );
     setTimeout(() => setRememberNotice(null), 4000);
   };
@@ -393,9 +393,7 @@ export default function AnalyticsViewPage() {
               </h3>
             </div>
             <p className="text-xs text-neutral-400 font-light leading-relaxed">
-              When enabled, this browser maintains a secure, anonymous identifier so repeated visits
-              within 30 days are recognized as the same unique visitor. Toggle off to treat future visits
-              from this device as new visitors.
+              When turned ON, this device is remembered and excluded from counting views so your own browsing does not inflate your portfolio traffic. Toggle OFF to treat this device as a normal visitor.
             </p>
           </div>
 

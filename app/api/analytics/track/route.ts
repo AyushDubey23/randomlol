@@ -67,6 +67,21 @@ export async function POST(request: Request) {
       const deviceData = deviceDoc.exists() ? deviceDoc.data() : null;
       const isNewVisitorToday = !deviceDoc.exists() || deviceData?.lastSeenDate !== today;
 
+      // If this device is remembered and already recognized, do NOT count duplicate views
+      if (rememberDevice && deviceDoc.exists()) {
+        const nowIso = new Date().toISOString();
+        transaction.set(
+          deviceRef,
+          {
+            lastSeen: nowIso,
+            lastSeenDate: today,
+            visitCount: increment(1),
+          },
+          { merge: true }
+        );
+        return;
+      }
+
       // Update daily aggregated document
       if (dailyDoc.exists()) {
         transaction.update(dailyRef, {
