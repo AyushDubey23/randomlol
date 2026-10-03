@@ -189,22 +189,20 @@ export async function POST(request: Request) {
       );
     });
 
-    // Record view in the recent activity log (unless excluded duplicate)
-    if (!isDuplicateRemembered) {
-      await setDoc(recentViewRef, {
-        id: recentViewId,
-        createdAt: now,
-        date: today,
-        time: currentTimeStr,
-        ip,
-        device,
-        deviceType,
-        path: cleanPath,
-        action: "page_view",
-        deviceId,
-        isRemembered: Boolean(rememberDevice),
-      });
-    }
+    // Always record in the recent activity log so live visits, IPs and devices appear
+    await setDoc(recentViewRef, {
+      id: recentViewId,
+      createdAt: now,
+      date: today,
+      time: currentTimeStr,
+      ip,
+      device,
+      deviceType,
+      path: cleanPath,
+      action: "page_view",
+      deviceId,
+      isRemembered: Boolean(rememberDevice),
+    });
 
     return NextResponse.json({ ok: true, date: today, ip, device });
   } catch (error: any) {

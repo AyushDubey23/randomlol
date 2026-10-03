@@ -14,11 +14,6 @@ export default function PortfolioAnalyticsTracker() {
       return;
     }
 
-    // If device remembering is enabled (switch turned ON), do NOT count this device's visits!
-    if (isDeviceExcluded()) {
-      return;
-    }
-
     // Prevent double-tracking on the same page within the same component mount
     if (hasTrackedRef.current === pathname) {
       return;
@@ -29,11 +24,6 @@ export default function PortfolioAnalyticsTracker() {
     const trackView = async () => {
       try {
         const { deviceId, remember } = getOrCreateAnonymousDeviceId();
-
-        // Double check exclusion right before sending
-        if (isDeviceExcluded()) {
-          return;
-        }
 
         // Use keepalive fetch for reliability even if visitor navigates away quickly
         await fetch("/api/analytics/track", {
