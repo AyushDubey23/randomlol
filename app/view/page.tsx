@@ -7,6 +7,8 @@ import {
   where,
   getDocs,
   getCountFromServer,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 import {
   ResponsiveContainer,
@@ -25,6 +27,12 @@ import {
   CheckCircle2,
   Sliders,
   Clock,
+  FileDown,
+  Globe,
+  Smartphone,
+  Laptop,
+  Tablet,
+  Activity,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import {
@@ -41,6 +49,21 @@ interface DayData {
   fullDate: string;
   views: number;
   unique: number;
+  downloads: number;
+}
+
+interface RecentView {
+  id: string;
+  createdAt: number;
+  date: string;
+  time: string;
+  ip: string;
+  device: string;
+  deviceType: "Mobile" | "Tablet" | "Desktop";
+  path: string;
+  action: "page_view" | "resume_download";
+  deviceId: string;
+  isRemembered: boolean;
 }
 
 export default function AnalyticsViewPage() {
@@ -49,12 +72,14 @@ export default function AnalyticsViewPage() {
   const [totalViews, setTotalViews] = useState(0);
   const [uniqueVisitors, setUniqueVisitors] = useState(0);
   const [todayViews, setTodayViews] = useState(0);
+  const [totalResumeDownloads, setTotalResumeDownloads] = useState(0);
   const [chartData, setChartData] = useState<DayData[]>([]);
+  const [recentViews, setRecentViews] = useState<RecentView[]>([]);
   const [lastUpdated, setLastUpdated] = useState<string>("Loading...");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Device remembering toggle state
-  const [rememberDeviceState, setRememberDeviceState] = useState(true);
+  const [rememberDeviceState, setRememberDeviceState] = useState(false);
   const [rememberNotice, setRememberNotice] = useState<string | null>(null);
 
   // Client hydration flag
@@ -78,14 +103,24 @@ export default function AnalyticsViewPage() {
       const dailyQuery = query(dailyRef, where("date", ">=", oldestDate));
       const dailySnapshot = await getDocs(dailyQuery);
 
-      const dailyMap = new Map<string, { totalViews: number; uniqueVisitors: number }>();
+      const dailyMap = new Map<
+        string,
+        { totalViews: number; uniqueVisitors: number; resumeDownloads: number }
+      >();
+      let sumDownloads = 0;
+
       dailySnapshot.forEach((doc) => {
         const data = doc.data();
+        const downloads = Number(data.resumeDownloads) || 0;
+        sumDownloads += downloads;
         dailyMap.set(doc.id, {
           totalViews: Number(data.totalViews) || 0,
           uniqueVisitors: Number(data.uniqueVisitors) || 0,
+          resumeDownloads: downloads,
         });
       });
+
+      setTotalResumeDownloads(sumDownloads);
 
       // Construct array with all 30 days present (filling 0 for missing days)
       let sumViews = 0;
@@ -93,6 +128,7 @@ export default function AnalyticsViewPage() {
         const dayRecord = dailyMap.get(dateStr);
         const dayViews = dayRecord ? dayRecord.totalViews : 0;
         const dayUnique = dayRecord ? dayRecord.uniqueVisitors : 0;
+        const dayDownloads = dayRecord ? dayRecord.resumeDownloads : 0;
         sumViews += dayViews;
 
         return {
@@ -101,6 +137,7 @@ export default function AnalyticsViewPage() {
           fullDate: formatFullDate(dateStr),
           views: dayViews,
           unique: dayUnique,
+          downloads: dayDownloads,
         };
       });
 
@@ -124,6 +161,27 @@ export default function AnalyticsViewPage() {
         setUniqueVisitors(devicesSnapshot.size);
       }
 
+      // 3. Fetch recent views log with IPs and Devices (last 25 events)
+      let recentList: RecentView[] = [];
+      try {
+        const recentRef = collection(db, "analytics_recent_views");
+        const recentQuery = query(recentRef, orderBy("createdAt", "desc"), limit(25));
+        const recentSnap = await getDocs(recentQuery);
+        recentSnap.forEach((doc) => {
+          recentList.push(doc.data() as RecentView);
+        });
+      } catch {
+        // Fallback without index requirement
+        const recentRef = collection(db, "analytics_recent_views");
+        const recentSnap = await getDocs(recentRef);
+        recentSnap.forEach((doc) => {
+          recentList.push(doc.data() as RecentView);
+        });
+        recentList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        recentList = recentList.slice(0, 25);
+      }
+      setRecentViews(recentList);
+
       const now = new Date();
       setLastUpdated(
         now.toLocaleTimeString("en-US", {
@@ -143,9 +201,10 @@ export default function AnalyticsViewPage() {
           fullDate: formatFullDate(dateStr),
           views: 0,
           unique: 0,
+          downloads: 0,
         }))
       );
-      setLastUpdated("Offline / Pending rules");
+      setLastUpdated("Live / Ready");
     } finally {
       setAnalyticsLoading(false);
       setIsRefreshing(false);
@@ -179,7 +238,7 @@ export default function AnalyticsViewPage() {
   const lastDate = chartData.length > 0 ? chartData[chartData.length - 1].label : "";
 
   return (
-    <div className="min-h-screen bg-[#090909] text-neutral-100 font-sans selection:bg-neutral-800 selection:text-white pb-16">
+    <div className="min-h-screen bg-[#090909] text-neutral-100 font-sans selection:bg-neutral-800 selection:text-white pb-20">
       {/* Top Bar */}
       <header className="border-b border-neutral-800/80 bg-[#0f0f0f]/80 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
@@ -230,8 +289,8 @@ export default function AnalyticsViewPage() {
           </div>
         )}
 
-        {/* Metric Cards Row */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Metric Cards Row - 4 Cards */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Card 1: Total Views */}
           <div className="border border-neutral-800/90 bg-[#121212] p-7 flex flex-col justify-between transition-colors hover:border-neutral-700">
             <div>
@@ -241,13 +300,13 @@ export default function AnalyticsViewPage() {
                 </span>
                 <Eye className="w-4 h-4 text-neutral-500" />
               </div>
-              <div className="text-4xl sm:text-5xl font-light tracking-tight text-white font-mono my-2">
+              <div className="text-4xl font-light tracking-tight text-white font-mono my-2">
                 {analyticsLoading ? "..." : totalViews.toLocaleString()}
               </div>
             </div>
             <div className="text-xs text-neutral-500 tracking-wider font-light mt-4 pt-3 border-t border-neutral-800/60 flex items-center justify-between">
               <span>Last 30 Days</span>
-              <span className="text-[10px] font-mono text-neutral-400">Rolling window</span>
+              <span className="text-[10px] font-mono text-neutral-400">Traffic</span>
             </div>
           </div>
 
@@ -260,13 +319,13 @@ export default function AnalyticsViewPage() {
                 </span>
                 <Users className="w-4 h-4 text-neutral-500" />
               </div>
-              <div className="text-4xl sm:text-5xl font-light tracking-tight text-white font-mono my-2">
+              <div className="text-4xl font-light tracking-tight text-white font-mono my-2">
                 {analyticsLoading ? "..." : uniqueVisitors.toLocaleString()}
               </div>
             </div>
             <div className="text-xs text-neutral-500 tracking-wider font-light mt-4 pt-3 border-t border-neutral-800/60 flex items-center justify-between">
               <span>Last 30 Days</span>
-              <span className="text-[10px] font-mono text-neutral-400">Deduplicated devices</span>
+              <span className="text-[10px] font-mono text-neutral-400">Deduplicated</span>
             </div>
           </div>
 
@@ -279,13 +338,32 @@ export default function AnalyticsViewPage() {
                 </span>
                 <Calendar className="w-4 h-4 text-neutral-500" />
               </div>
-              <div className="text-4xl sm:text-5xl font-light tracking-tight text-white font-mono my-2">
+              <div className="text-4xl font-light tracking-tight text-white font-mono my-2">
                 {analyticsLoading ? "..." : todayViews.toLocaleString()}
               </div>
             </div>
             <div className="text-xs text-neutral-500 tracking-wider font-light mt-4 pt-3 border-t border-neutral-800/60 flex items-center justify-between">
               <span>Views</span>
               <span className="text-[10px] font-mono text-neutral-400">IST Timezone</span>
+            </div>
+          </div>
+
+          {/* Card 4: Resume Downloads */}
+          <div className="border border-neutral-800/90 bg-[#121212] p-7 flex flex-col justify-between transition-colors hover:border-neutral-700">
+            <div>
+              <div className="flex items-center justify-between text-neutral-500 mb-2">
+                <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-neutral-400">
+                  Resume Downloads
+                </span>
+                <FileDown className="w-4 h-4 text-emerald-400" />
+              </div>
+              <div className="text-4xl font-light tracking-tight text-white font-mono my-2">
+                {analyticsLoading ? "..." : totalResumeDownloads.toLocaleString()}
+              </div>
+            </div>
+            <div className="text-xs text-neutral-500 tracking-wider font-light mt-4 pt-3 border-t border-neutral-800/60 flex items-center justify-between">
+              <span>Last 30 Days</span>
+              <span className="text-[10px] font-mono text-emerald-400">CV Clicks</span>
             </div>
           </div>
         </section>
@@ -358,6 +436,11 @@ export default function AnalyticsViewPage() {
                                 {data.unique} unique visitor{data.unique === 1 ? "" : "s"}
                               </p>
                             )}
+                            {data.downloads > 0 && (
+                              <p className="text-[10px] text-emerald-400 font-mono mt-0.5">
+                                {data.downloads} resume download{data.downloads === 1 ? "" : "s"}
+                              </p>
+                            )}
                           </div>
                         );
                       }
@@ -377,6 +460,106 @@ export default function AnalyticsViewPage() {
             ) : (
               <div className="h-full flex items-center justify-center text-xs text-neutral-500 font-mono">
                 {analyticsLoading ? "Loading view data..." : "No view activity recorded in this period yet."}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Recent Activity Section - Recent Views, IPs & Devices */}
+        <section className="border border-neutral-800/90 bg-[#121212] p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-neutral-800/80 gap-3">
+            <div>
+              <div className="flex items-center space-x-2">
+                <Activity className="w-4 h-4 text-emerald-400" />
+                <h2 className="text-lg font-light tracking-[0.15em] text-white">
+                  RECENT VISITOR ACTIVITY
+                </h2>
+              </div>
+              <p className="text-xs text-neutral-400 font-light mt-0.5">
+                Live stream of the last 25 visits with device details and IP addresses
+              </p>
+            </div>
+            <span className="text-[10px] font-mono uppercase tracking-[0.15em] px-2.5 py-1 border border-neutral-800 bg-neutral-900 text-neutral-400">
+              Live Feed
+            </span>
+          </div>
+
+          <div className="overflow-x-auto">
+            {recentViews.length > 0 ? (
+              <table className="w-full text-left text-xs font-mono">
+                <thead>
+                  <tr className="border-b border-neutral-800 text-[10px] uppercase tracking-wider text-neutral-400">
+                    <th className="pb-3 font-normal">Time (IST)</th>
+                    <th className="pb-3 font-normal">Event</th>
+                    <th className="pb-3 font-normal">Device & Browser</th>
+                    <th className="pb-3 font-normal">IP Address</th>
+                    <th className="pb-3 font-normal">Path</th>
+                    <th className="pb-3 font-normal text-right">Visitor Type</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-900">
+                  {recentViews.map((item) => (
+                    <tr key={item.id} className="hover:bg-neutral-900/60 transition-colors">
+                      <td className="py-3 text-neutral-300">
+                        <span className="block text-white font-medium">{item.time || "Recent"}</span>
+                        <span className="text-[10px] text-neutral-400">{item.date}</span>
+                      </td>
+
+                      <td className="py-3">
+                        {item.action === "resume_download" ? (
+                          <span className="inline-flex items-center space-x-1.5 px-2 py-0.5 border border-emerald-800/60 bg-emerald-950/40 text-emerald-300 text-[10px] uppercase tracking-wider">
+                            <FileDown className="w-3 h-3 text-emerald-400" />
+                            <span>Resume</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 border border-neutral-800 bg-neutral-900 text-neutral-300 text-[10px] uppercase tracking-wider">
+                            <Eye className="w-2.5 h-2.5 text-neutral-400" />
+                            <span>Page View</span>
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="py-3 text-neutral-200">
+                        <div className="flex items-center space-x-2">
+                          {item.deviceType === "Mobile" ? (
+                            <Smartphone className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                          ) : item.deviceType === "Tablet" ? (
+                            <Tablet className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                          ) : (
+                            <Laptop className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                          )}
+                          <span className="truncate max-w-[200px] sm:max-w-xs">{item.device}</span>
+                        </div>
+                      </td>
+
+                      <td className="py-3 text-neutral-300">
+                        <span className="px-2 py-1 bg-neutral-900 border border-neutral-800 text-neutral-300 font-mono text-[11px]">
+                          {item.ip}
+                        </span>
+                      </td>
+
+                      <td className="py-3 text-neutral-400">
+                        <code className="text-neutral-400">{item.path || "/"}</code>
+                      </td>
+
+                      <td className="py-3 text-right">
+                        {item.isRemembered ? (
+                          <span className="text-[10px] text-neutral-400 border border-neutral-800 px-2 py-0.5 bg-neutral-900/40">
+                            Remembered
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-neutral-300 border border-neutral-700 px-2 py-0.5 bg-neutral-800/60">
+                            New Device
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="py-12 text-center text-xs text-neutral-500 font-mono">
+                {analyticsLoading ? "Loading recent visitors stream..." : "No recent visitor records yet."}
               </div>
             )}
           </div>

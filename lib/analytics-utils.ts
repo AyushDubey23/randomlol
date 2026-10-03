@@ -196,3 +196,46 @@ export function setRememberDevice(enabled: boolean): void {
     // ignore
   }
 }
+
+/**
+ * Returns the current time formatted in IST (Asia/Kolkata), e.g. "8:45 PM"
+ */
+export function getISTTimeString(date: Date = new Date()): string {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(date);
+}
+
+/**
+ * Parses user-agent header into a readable device and browser label
+ */
+export function parseUserAgent(ua: string): { device: string; deviceType: "Mobile" | "Tablet" | "Desktop" } {
+  if (!ua) return { device: "Unknown Device", deviceType: "Desktop" };
+
+  const isTablet = /iPad|Tablet|PlayBook|Silk/i.test(ua);
+  const isMobile = !isTablet && /Mobile|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+  const deviceType: "Mobile" | "Tablet" | "Desktop" = isTablet ? "Tablet" : isMobile ? "Mobile" : "Desktop";
+
+  let os = "OS";
+  if (/iPhone|iPad|iPod/i.test(ua)) os = "iOS";
+  else if (/Macintosh|Mac OS X/i.test(ua)) os = "macOS";
+  else if (/Android/i.test(ua)) os = "Android";
+  else if (/Windows NT/i.test(ua)) os = "Windows";
+  else if (/Linux/i.test(ua)) os = "Linux";
+  else if (/CrOS/i.test(ua)) os = "ChromeOS";
+
+  let browser = "Browser";
+  if (/Edg/i.test(ua)) browser = "Edge";
+  else if (/OPR|Opera/i.test(ua)) browser = "Opera";
+  else if (/Chrome/i.test(ua)) browser = "Chrome";
+  else if (/Safari/i.test(ua)) browser = "Safari";
+  else if (/Firefox/i.test(ua)) browser = "Firefox";
+
+  return {
+    device: `${deviceType} • ${browser} (${os})`,
+    deviceType,
+  };
+}

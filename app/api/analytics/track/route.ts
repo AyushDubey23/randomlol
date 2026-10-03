@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/firebase";
-import { getISTDateString } from "@/lib/analytics-utils";
+import { getISTDateString, getISTTimeString, parseUserAgent } from "@/lib/analytics-utils";
 import {
   doc,
+  setDoc,
   runTransaction,
   serverTimestamp,
   increment,
@@ -21,6 +22,19 @@ setInterval(() => {
   }
 }, 300_000);
 
+function getClientIp(request: Request): string {
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const first = forwarded.split(",")[0].trim();
+    if (first) return first;
+  }
+  const realIp = request.headers.get("x-real-ip");
+  if (realIp) return realIp.trim();
+  const cfConnectingIp = request.headers.get("cf-connecting-ip");
+  if (cfConnectingIp) return cfConnectingIp.trim();
+  return "127.0.0.1";
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => null);
@@ -29,7 +43,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, message: "Invalid payload" }, { status: 400 });
     }
 
-    const { deviceId, rememberDevice = true, path = "/" } = body;
+    const {
+      deviceId,
+      rememberDevice = false,
+      path = "/",
+      action = "page_view",
+    } = body;
 
     // Validate path - Never count /view, API routes, or static files
     const cleanPath = typeof path === "string" ? path.toLowerCase().trim() : "/";
@@ -42,23 +61,74 @@ export async function POST(request: Request) {
     }
 
     // Validate deviceId
-    if (!deviceId || typeof deviceId !== "string" || deviceId.length < 8 || deviceId.length > 128) {
+    if (!deviceId || typeof deviceId !== "string" || deviceId.length < 6 || deviceId.length > 128) {
       return NextResponse.json({ ok: false, message: "Invalid device identifier" }, { status: 400 });
     }
 
-    // Rate-limiting: limit 1 view recording per device every 4 seconds
+    // Rate-limiting: limit 1 view recording per device every 3 seconds for page views
     const now = Date.now();
-    const lastRequest = recentRequests.get(deviceId);
-    if (lastRequest && now - lastRequest < 4000) {
-      return NextResponse.json({ ok: true, rateLimited: true });
+    if (action !== "resume_download") {
+      const lastRequest = recentRequests.get(deviceId);
+      if (lastRequest && now - lastRequest < 3000) {
+        return NextResponse.json({ ok: true, rateLimited: true });
+      }
+      recentRequests.set(deviceId, now);
     }
-    recentRequests.set(deviceId, now);
 
-    // Get current date in IST (Asia/Kolkata)
+    // Get current date and time in IST (Asia/Kolkata)
     const today = getISTDateString();
+    const currentTimeStr = getISTTimeString();
+
+    // Extract IP and Device details
+    const ip = getClientIp(request);
+    const userAgentStr = request.headers.get("user-agent") || "";
+    const { device, deviceType } = parseUserAgent(userAgentStr);
 
     const deviceRef = doc(db, "analytics_devices", deviceId);
     const dailyRef = doc(db, "analytics_daily", today);
+    const recentViewId = `${now}_${deviceId.slice(0, 6)}`;
+    const recentViewRef = doc(db, "analytics_recent_views", recentViewId);
+
+    // 1. Handle Resume Download Event
+    if (action === "resume_download") {
+      await runTransaction(db, async (transaction) => {
+        const dailyDoc = await transaction.get(dailyRef);
+        if (dailyDoc.exists()) {
+          transaction.update(dailyRef, {
+            resumeDownloads: increment(1),
+            lastUpdated: serverTimestamp(),
+          });
+        } else {
+          transaction.set(dailyRef, {
+            date: today,
+            totalViews: 0,
+            uniqueVisitors: 0,
+            resumeDownloads: 1,
+            lastUpdated: serverTimestamp(),
+          });
+        }
+      });
+
+      // Log download to recent views table
+      await setDoc(recentViewRef, {
+        id: recentViewId,
+        createdAt: now,
+        date: today,
+        time: currentTimeStr,
+        ip,
+        device,
+        deviceType,
+        path: cleanPath,
+        action: "resume_download",
+        deviceId,
+        isRemembered: Boolean(rememberDevice),
+      });
+
+      return NextResponse.json({ ok: true, action: "resume_download" });
+    }
+
+    // 2. Handle Regular Page View
+    let isDuplicateRemembered = false;
 
     await runTransaction(db, async (transaction) => {
       const deviceDoc = await transaction.get(deviceRef);
@@ -69,6 +139,7 @@ export async function POST(request: Request) {
 
       // If this device is remembered and already recognized, do NOT count duplicate views
       if (rememberDevice && deviceDoc.exists()) {
+        isDuplicateRemembered = true;
         const nowIso = new Date().toISOString();
         transaction.set(
           deviceRef,
@@ -94,6 +165,7 @@ export async function POST(request: Request) {
           date: today,
           totalViews: 1,
           uniqueVisitors: 1,
+          resumeDownloads: 0,
           lastUpdated: serverTimestamp(),
         });
       }
@@ -108,15 +180,34 @@ export async function POST(request: Request) {
           lastSeenDate: today,
           visitCount: increment(1),
           rememberDevice: Boolean(rememberDevice),
+          ip,
+          device,
+          deviceType,
           ...(deviceDoc.exists() ? {} : { firstSeen: nowIso }),
         },
         { merge: true }
       );
     });
 
-    return NextResponse.json({ ok: true, date: today });
+    // Record view in the recent activity log (unless excluded duplicate)
+    if (!isDuplicateRemembered) {
+      await setDoc(recentViewRef, {
+        id: recentViewId,
+        createdAt: now,
+        date: today,
+        time: currentTimeStr,
+        ip,
+        device,
+        deviceType,
+        path: cleanPath,
+        action: "page_view",
+        deviceId,
+        isRemembered: Boolean(rememberDevice),
+      });
+    }
+
+    return NextResponse.json({ ok: true, date: today, ip, device });
   } catch (error: any) {
-    // Fail gracefully and silently for the client
     console.error("Analytics tracking error:", error?.message || error);
     return NextResponse.json(
       { ok: false, message: "Tracking currently queued or unavailable" },

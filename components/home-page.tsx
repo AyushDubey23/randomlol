@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Menu, X, Instagram, Linkedin, Mail, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
+import { getOrCreateAnonymousDeviceId, isDeviceExcluded } from "@/lib/analytics-utils"
 
 const roles = [
   {
@@ -751,6 +752,24 @@ export default function HomePage() {
     href="https://drive.google.com/file/d/1JwsGFUmmTOSD9G7igF8jpsDqWK4LF-y2/view?usp=sharing"
     target="_blank"
     rel="noopener noreferrer"
+    onClick={() => {
+      try {
+        if (!isDeviceExcluded()) {
+          const { deviceId, remember } = getOrCreateAnonymousDeviceId();
+          fetch("/api/analytics/track", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              deviceId,
+              rememberDevice: remember,
+              action: "resume_download",
+              path: "/resume",
+            }),
+            keepalive: true,
+          }).catch(() => {});
+        }
+      } catch {}
+    }}
     className="inline-block px-6 py-3 bg-black text-white text-xs tracking-wider hover:bg-gray-800 transition-colors hover-scale"
   >
     RESUME
