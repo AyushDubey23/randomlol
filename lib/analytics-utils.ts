@@ -1,7 +1,7 @@
 /**
  * Analytics Utility Module
  * Manages IST (Asia/Kolkata) date calculations, rolling 30-day windows,
- * and anonymous privacy-preserving device identification.
+ * relative time formatting, and anonymous privacy-preserving device identification.
  */
 
 export const STORAGE_KEY_DEVICE_ID = "hriday_analytics_device_id";
@@ -38,6 +38,36 @@ export function getISTDateString(date: Date = new Date()): string {
     day: "2-digit",
   });
   return formatter.format(date);
+}
+
+/**
+ * Formats a timestamp or ISO date string into a relative time string
+ * (e.g. "just now", "5 mins ago", "2 hours ago", "3 days ago")
+ */
+export function formatTimeAgo(dateOrTimestamp: string | number | Date | undefined | null): string {
+  if (!dateOrTimestamp) return "recently";
+  const time =
+    typeof dateOrTimestamp === "number"
+      ? dateOrTimestamp
+      : new Date(dateOrTimestamp).getTime();
+  if (isNaN(time)) return "recently";
+
+  const diffMs = Date.now() - time;
+  const diffSec = Math.max(0, Math.floor(diffMs / 1000));
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHours = Math.floor(diffMin / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffSec < 45) return "just now";
+  if (diffMin === 1) return "1 min ago";
+  if (diffMin < 60) return `${diffMin} mins ago`;
+  if (diffHours === 1) return "1 hour ago";
+  if (diffHours < 24) return `${diffHours} hours ago`;
+  if (diffDays === 1) return "1 day ago";
+  if (diffDays < 30) return `${diffDays} days ago`;
+  const diffMonths = Math.floor(diffDays / 30);
+  if (diffMonths === 1) return "1 month ago";
+  return `${diffMonths} months ago`;
 }
 
 /**

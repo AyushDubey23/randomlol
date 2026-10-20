@@ -406,6 +406,22 @@ export default function HomePage() {
               href="https://ayushdubey23.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => {
+                try {
+                  const { deviceId, remember } = getOrCreateAnonymousDeviceId();
+                  fetch("/api/analytics/track", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      deviceId,
+                      rememberDevice: remember,
+                      action: "ayush_click",
+                      path: "/ayush-dubey",
+                    }),
+                    keepalive: true,
+                  }).catch(() => {});
+                } catch {}
+              }}
               className="underline hover:text-gray-600 transition-colors"
             >
               Ayush Dubey
@@ -802,6 +818,22 @@ export default function HomePage() {
               href="https://ayushdubey23.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => {
+                try {
+                  const { deviceId, remember } = getOrCreateAnonymousDeviceId();
+                  fetch("/api/analytics/track", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      deviceId,
+                      rememberDevice: remember,
+                      action: "ayush_click",
+                      path: "/ayush-dubey",
+                    }),
+                    keepalive: true,
+                  }).catch(() => {});
+                } catch {}
+              }}
               className="underline hover:text-gray-600 transition-colors"
             >
               Ayush Dubey

@@ -7,8 +7,8 @@ import {
   where,
   getDocs,
   getCountFromServer,
-  orderBy,
-  limit,
+  doc,
+  getDoc,
 } from "firebase/firestore";
 import {
   ResponsiveContainer,
@@ -26,19 +26,23 @@ import {
   RefreshCw,
   CheckCircle2,
   Sliders,
-  Clock,
   FileDown,
-  Globe,
   Smartphone,
   Laptop,
   Tablet,
   Activity,
+  Copy,
+  Check,
+  Sparkles,
+  Repeat,
+  FileText,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import {
   getLast30DaysIST,
   formatChartDate,
   formatFullDate,
+  formatTimeAgo,
   isDeviceRemembered,
   setRememberDevice,
 } from "@/lib/analytics-utils";
@@ -52,18 +56,22 @@ interface DayData {
   downloads: number;
 }
 
-interface RecentView {
+interface ActivityEvent {
   id: string;
-  createdAt: number;
+  timestamp: number;
+  isoTime?: string;
   date: string;
   time: string;
   ip: string;
   device: string;
   deviceType: "Mobile" | "Tablet" | "Desktop";
   path: string;
-  action: "page_view" | "resume_download";
+  action: "page_view" | "resume_download" | "ayush_click";
   deviceId: string;
-  isRemembered: boolean;
+  isFirstTime: boolean;
+  visitCount?: number;
+  sawResume: boolean;
+  clickedAyushLink: boolean;
 }
 
 export default function AnalyticsViewPage() {
@@ -74,9 +82,10 @@ export default function AnalyticsViewPage() {
   const [todayViews, setTodayViews] = useState(0);
   const [totalResumeDownloads, setTotalResumeDownloads] = useState(0);
   const [chartData, setChartData] = useState<DayData[]>([]);
-  const [recentViews, setRecentViews] = useState<RecentView[]>([]);
+  const [recentViews, setRecentViews] = useState<ActivityEvent[]>([]);
   const [lastUpdated, setLastUpdated] = useState<string>("Loading...");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   // Device remembering toggle state
   const [rememberDeviceState, setRememberDeviceState] = useState(false);
@@ -85,7 +94,31 @@ export default function AnalyticsViewPage() {
   // Client hydration flag
   const [mounted, setMounted] = useState(false);
 
-  // Fetch 30-day analytics data directly from Firestore
+  // Copy IP handler with user feedback
+  const handleCopyIp = async (ip: string, eventId: string) => {
+    if (!ip || ip === "Unknown IP") return;
+    try {
+      await navigator.clipboard.writeText(ip);
+      setCopiedId(eventId);
+      setTimeout(() => {
+        setCopiedId((prev) => (prev === eventId ? null : prev));
+      }, 2000);
+    } catch {
+      // Fallback
+      const textArea = document.createElement("textarea");
+      textArea.value = ip;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopiedId(eventId);
+      setTimeout(() => {
+        setCopiedId((prev) => (prev === eventId ? null : prev));
+      }, 2000);
+    }
+  };
+
+  // Fetch 30-day analytics data & recent activity
   const loadAnalytics = useCallback(async (isManualRefresh = false) => {
     if (isManualRefresh) {
       setIsRefreshing(true);
@@ -93,12 +126,14 @@ export default function AnalyticsViewPage() {
       setAnalyticsLoading(true);
     }
 
-    try {
-      const dates = getLast30DaysIST();
-      const oldestDate = dates[0];
-      const todayDate = dates[dates.length - 1];
+    const dates = getLast30DaysIST();
+    const oldestDate = dates[0];
+    const todayDate = dates[dates.length - 1];
 
-      // 1. Fetch daily views from Firestore for the last 30 days
+    // ==========================================
+    // 1. Fetch daily views from Firestore
+    // ==========================================
+    try {
       const dailyRef = collection(db, "analytics_daily");
       const dailyQuery = query(dailyRef, where("date", ">=", oldestDate));
       const dailySnapshot = await getDocs(dailyQuery);
@@ -109,11 +144,11 @@ export default function AnalyticsViewPage() {
       >();
       let sumDownloads = 0;
 
-      dailySnapshot.forEach((doc) => {
-        const data = doc.data();
+      dailySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
         const downloads = Number(data.resumeDownloads) || 0;
         sumDownloads += downloads;
-        dailyMap.set(doc.id, {
+        dailyMap.set(docSnap.id, {
           totalViews: Number(data.totalViews) || 0,
           uniqueVisitors: Number(data.uniqueVisitors) || 0,
           resumeDownloads: downloads,
@@ -122,7 +157,7 @@ export default function AnalyticsViewPage() {
 
       setTotalResumeDownloads(sumDownloads);
 
-      // Construct array with all 30 days present (filling 0 for missing days)
+      // Construct array with all 30 days present (with exact numbers or 0)
       let sumViews = 0;
       const formattedChart: DayData[] = dates.map((dateStr) => {
         const dayRecord = dailyMap.get(dateStr);
@@ -144,44 +179,120 @@ export default function AnalyticsViewPage() {
       setChartData(formattedChart);
       setTotalViews(sumViews);
 
-      // Today's views
       const todayRecord = dailyMap.get(todayDate);
       setTodayViews(todayRecord ? todayRecord.totalViews : 0);
+    } catch (chartErr) {
+      console.error("Daily chart fetch error:", chartErr);
+    }
 
-      // 2. Fetch unique visitors count for devices active in the last 30 days
+    // ==========================================
+    // 2. Fetch unique visitors count
+    // ==========================================
+    try {
       const devicesRef = collection(db, "analytics_devices");
-      const devicesQuery = query(devicesRef, where("lastSeenDate", ">=", oldestDate));
-
       try {
-        const countSnapshot = await getCountFromServer(devicesQuery);
+        const countSnapshot = await getCountFromServer(devicesRef);
         setUniqueVisitors(countSnapshot.data().count);
       } catch {
-        // Fallback to getDocs if count aggregation is restricted
-        const devicesSnapshot = await getDocs(devicesQuery);
+        const devicesSnapshot = await getDocs(devicesRef);
         setUniqueVisitors(devicesSnapshot.size);
       }
+    } catch (devicesErr) {
+      console.error("Devices count fetch error:", devicesErr);
+    }
 
-      // 3. Fetch recent views log with IPs and Devices (last 25 events)
-      let recentList: RecentView[] = [];
+    // ==========================================
+    // 3. Fetch recent views log & devices list
+    // ==========================================
+    try {
+      const eventMap = new Map<string, ActivityEvent>();
+
+      // A. Load from analytics_daily/recent_events_log (real-time stream)
       try {
-        const recentRef = collection(db, "analytics_recent_views");
-        const recentQuery = query(recentRef, orderBy("createdAt", "desc"), limit(25));
-        const recentSnap = await getDocs(recentQuery);
-        recentSnap.forEach((doc) => {
-          recentList.push(doc.data() as RecentView);
-        });
-      } catch {
-        // Fallback without index requirement
-        const recentRef = collection(db, "analytics_recent_views");
-        const recentSnap = await getDocs(recentRef);
-        recentSnap.forEach((doc) => {
-          recentList.push(doc.data() as RecentView);
-        });
-        recentList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-        recentList = recentList.slice(0, 25);
+        const feedRef = doc(db, "analytics_daily", "recent_events_log");
+        const feedSnap = await getDoc(feedRef);
+        if (feedSnap.exists() && Array.isArray(feedSnap.data().events)) {
+          feedSnap.data().events.forEach((ev: any) => {
+            if (ev && ev.id) {
+              eventMap.set(ev.id, {
+                id: ev.id,
+                timestamp: ev.timestamp || (ev.isoTime ? new Date(ev.isoTime).getTime() : Date.now()),
+                isoTime: ev.isoTime,
+                date: ev.date || todayDate,
+                time: ev.time || "Recent",
+                ip: ev.ip || "Unknown IP",
+                device: ev.device || "Unknown Device",
+                deviceType: ev.deviceType || "Desktop",
+                path: ev.path || "/",
+                action: ev.action || "page_view",
+                deviceId: ev.deviceId || "",
+                isFirstTime: Boolean(ev.isFirstTime ?? (ev.visitCount <= 1)),
+                visitCount: ev.visitCount || 1,
+                sawResume: Boolean(ev.sawResume || ev.action === "resume_download"),
+                clickedAyushLink: Boolean(ev.clickedAyushLink || ev.action === "ayush_click"),
+              });
+            }
+          });
+        }
+      } catch (feedErr) {
+        console.warn("Could not read recent_events_log, falling back to devices:", feedErr);
       }
-      setRecentViews(recentList);
 
+      // B. Load from analytics_devices (all historical visitors)
+      try {
+        const devicesRef = collection(db, "analytics_devices");
+        const devSnapshot = await getDocs(devicesRef);
+        devSnapshot.forEach((docSnap) => {
+          const dev = docSnap.data();
+          const devId = docSnap.id;
+          const timeVal = dev.lastSeen || dev.firstSeen || new Date().toISOString();
+          const timestamp = new Date(timeVal).getTime() || Date.now();
+          const syntheticId = `dev_${devId}`;
+
+          // If no specific event logged for this device yet, add it
+          const alreadyLogged = Array.from(eventMap.values()).some((e) => e.deviceId === devId);
+          if (!alreadyLogged) {
+            const visitCount = Number(dev.visitCount) || 1;
+            const sawResume = Boolean(dev.sawResume || dev.hasSeenResume);
+            const clickedAyushLink = Boolean(dev.clickedAyushLink);
+
+            eventMap.set(syntheticId, {
+              id: syntheticId,
+              timestamp,
+              isoTime: timeVal,
+              date: dev.lastSeenDate || todayDate,
+              time: new Date(timestamp).toLocaleTimeString("en-US", {
+                timeZone: "Asia/Kolkata",
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              }),
+              ip: dev.ip || "Unknown IP",
+              device: dev.device || "Desktop",
+              deviceType: dev.deviceType || "Desktop",
+              path: sawResume ? "/resume" : "/",
+              action: sawResume ? "resume_download" : "page_view",
+              deviceId: devId,
+              isFirstTime: visitCount <= 1,
+              visitCount,
+              sawResume,
+              clickedAyushLink,
+            });
+          }
+        });
+      } catch (devsErr) {
+        console.error("Could not fetch analytics_devices fallback:", devsErr);
+      }
+
+      // Convert map to sorted array (latest first)
+      const mergedList = Array.from(eventMap.values()).sort(
+        (a, b) => b.timestamp - a.timestamp
+      );
+
+      setRecentViews(mergedList.slice(0, 50));
+    } catch (recentErr) {
+      console.error("Recent activity fetch error:", recentErr);
+    } finally {
       const now = new Date();
       setLastUpdated(
         now.toLocaleTimeString("en-US", {
@@ -190,22 +301,6 @@ export default function AnalyticsViewPage() {
           second: "2-digit",
         })
       );
-    } catch (err: any) {
-      console.error("Failed to load analytics:", err);
-      // Fallback: render baseline 0s for the 30 days
-      const dates = getLast30DaysIST();
-      setChartData(
-        dates.map((dateStr) => ({
-          date: dateStr,
-          label: formatChartDate(dateStr),
-          fullDate: formatFullDate(dateStr),
-          views: 0,
-          unique: 0,
-          downloads: 0,
-        }))
-      );
-      setLastUpdated("Live / Ready");
-    } finally {
       setAnalyticsLoading(false);
       setIsRefreshing(false);
     }
@@ -391,11 +486,11 @@ export default function AnalyticsViewPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
                   data={chartData}
-                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                  margin={{ top: 15, right: 15, left: -20, bottom: 5 }}
                 >
                   <defs>
                     <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#ffffff" stopOpacity={0.25} />
+                      <stop offset="5%" stopColor="#ffffff" stopOpacity={0.35} />
                       <stop offset="95%" stopColor="#ffffff" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
@@ -417,6 +512,7 @@ export default function AnalyticsViewPage() {
                     fontSize={11}
                     tickLine={false}
                     allowDecimals={false}
+                    domain={[0, (dataMax: number) => Math.max(dataMax + 2, 4)]}
                     fontFamily="monospace"
                   />
                   <Tooltip
@@ -451,7 +547,9 @@ export default function AnalyticsViewPage() {
                     type="monotone"
                     dataKey="views"
                     stroke="#ffffff"
-                    strokeWidth={2}
+                    strokeWidth={2.5}
+                    dot={{ r: 3, fill: "#ffffff", stroke: "#121212", strokeWidth: 1.5 }}
+                    activeDot={{ r: 6, fill: "#ffffff", stroke: "#3b82f6", strokeWidth: 2 }}
                     fillOpacity={1}
                     fill="url(#viewsGradient)"
                   />
@@ -465,7 +563,7 @@ export default function AnalyticsViewPage() {
           </div>
         </section>
 
-        {/* Recent Activity Section - Recent Views, IPs & Devices */}
+        {/* Recent Activity Section */}
         <section className="border border-neutral-800/90 bg-[#121212] p-6 sm:p-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-neutral-800/80 gap-3">
             <div>
@@ -476,12 +574,14 @@ export default function AnalyticsViewPage() {
                 </h2>
               </div>
               <p className="text-xs text-neutral-400 font-light mt-0.5">
-                Live stream of the last 25 visits with device details and IP addresses
+                Live stream of visitors with relative time, IP addresses, tags, and engagement
               </p>
             </div>
-            <span className="text-[10px] font-mono uppercase tracking-[0.15em] px-2.5 py-1 border border-neutral-800 bg-neutral-900 text-neutral-400">
-              Live Feed
-            </span>
+            <div className="flex items-center space-x-2">
+              <span className="text-[10px] font-mono uppercase tracking-[0.15em] px-2.5 py-1 border border-neutral-800 bg-neutral-900 text-neutral-400">
+                Live Feed ({recentViews.length} Events)
+              </span>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
@@ -489,38 +589,36 @@ export default function AnalyticsViewPage() {
               <table className="w-full text-left text-xs font-mono">
                 <thead>
                   <tr className="border-b border-neutral-800 text-[10px] uppercase tracking-wider text-neutral-400">
-                    <th className="pb-3 font-normal">Time (IST)</th>
-                    <th className="pb-3 font-normal">Event</th>
-                    <th className="pb-3 font-normal">Device & Browser</th>
+                    <th className="pb-3 font-normal">Visited</th>
+                    <th className="pb-3 font-normal">Visitor / Device</th>
                     <th className="pb-3 font-normal">IP Address</th>
-                    <th className="pb-3 font-normal">Path</th>
-                    <th className="pb-3 font-normal text-right">Visitor Type</th>
+                    <th className="pb-3 font-normal">Visitor Type</th>
+                    <th className="pb-3 font-normal">Engagement</th>
+                    <th className="pb-3 font-normal text-right">Path</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-900">
                   {recentViews.map((item) => (
                     <tr key={item.id} className="hover:bg-neutral-900/60 transition-colors">
-                      <td className="py-3 text-neutral-300">
-                        <span className="block text-white font-medium">{item.time || "Recent"}</span>
-                        <span className="text-[10px] text-neutral-400">{item.date}</span>
+                      {/* 1. Time (relative + exact) */}
+                      <td className="py-3.5 pr-4 text-neutral-300 whitespace-nowrap">
+                        <span className="block text-white font-medium capitalize">
+                          {formatTimeAgo(item.timestamp || item.isoTime)}
+                        </span>
+                        <span className="text-[10px] text-neutral-500 font-mono">
+                          {item.time || "IST"} • {item.date}
+                        </span>
                       </td>
 
-                      <td className="py-3">
-                        {item.action === "resume_download" ? (
-                          <span className="inline-flex items-center space-x-1.5 px-2 py-0.5 border border-emerald-800/60 bg-emerald-950/40 text-emerald-300 text-[10px] uppercase tracking-wider">
-                            <FileDown className="w-3 h-3 text-emerald-400" />
-                            <span>Resume</span>
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 border border-neutral-800 bg-neutral-900 text-neutral-300 text-[10px] uppercase tracking-wider">
-                            <Eye className="w-2.5 h-2.5 text-neutral-400" />
-                            <span>Page View</span>
-                          </span>
-                        )}
-                      </td>
-
-                      <td className="py-3 text-neutral-200">
+                      {/* 2. Visitor Name / Device with small blue dot if clicked Ayush link */}
+                      <td className="py-3.5 pr-4 text-neutral-200">
                         <div className="flex items-center space-x-2">
+                          {item.clickedAyushLink && (
+                            <span
+                              className="inline-block w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.9)] ring-2 ring-blue-500/20 shrink-0"
+                              title="Engaged visitor"
+                            />
+                          )}
                           {item.deviceType === "Mobile" ? (
                             <Smartphone className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                           ) : item.deviceType === "Tablet" ? (
@@ -528,30 +626,72 @@ export default function AnalyticsViewPage() {
                           ) : (
                             <Laptop className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                           )}
-                          <span className="truncate max-w-[200px] sm:max-w-xs">{item.device}</span>
+                          <span className="truncate max-w-[180px] sm:max-w-xs text-neutral-200">
+                            {item.device}
+                          </span>
                         </div>
                       </td>
 
-                      <td className="py-3 text-neutral-300">
-                        <span className="px-2 py-1 bg-neutral-900 border border-neutral-800 text-neutral-300 font-mono text-[11px]">
-                          {item.ip}
-                        </span>
+                      {/* 3. IP Address with Copy Button */}
+                      <td className="py-3.5 pr-4 text-neutral-300 whitespace-nowrap">
+                        <div className="inline-flex items-center space-x-1.5 px-2 py-1 bg-neutral-900/90 border border-neutral-800 rounded-sm">
+                          <span className="text-neutral-200 font-mono text-[11px]">
+                            {item.ip}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleCopyIp(item.ip, item.id)}
+                            title="Copy IP Address"
+                            className="p-1 text-neutral-400 hover:text-white transition-colors cursor-pointer rounded hover:bg-neutral-800"
+                          >
+                            {copiedId === item.id ? (
+                              <div className="flex items-center space-x-1 text-emerald-400">
+                                <Check className="w-3 h-3 shrink-0" />
+                                <span className="text-[9px] uppercase tracking-wider font-mono">
+                                  Copied
+                                </span>
+                              </div>
+                            ) : (
+                              <Copy className="w-3 h-3 shrink-0" />
+                            )}
+                          </button>
+                        </div>
                       </td>
 
-                      <td className="py-3 text-neutral-400">
-                        <code className="text-neutral-400">{item.path || "/"}</code>
-                      </td>
-
-                      <td className="py-3 text-right">
-                        {item.isRemembered ? (
-                          <span className="text-[10px] text-neutral-400 border border-neutral-800 px-2 py-0.5 bg-neutral-900/40">
-                            Remembered
+                      {/* 4. Visitor Type: Unique vs Revisiter */}
+                      <td className="py-3.5 pr-4 whitespace-nowrap">
+                        {item.isFirstTime || (item.visitCount && item.visitCount <= 1) ? (
+                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 border border-purple-800/60 bg-purple-950/40 text-purple-300 text-[10px] uppercase font-mono tracking-wider rounded-sm">
+                            <Sparkles className="w-2.5 h-2.5 text-purple-400" />
+                            <span>Unique</span>
                           </span>
                         ) : (
-                          <span className="text-[10px] text-neutral-300 border border-neutral-700 px-2 py-0.5 bg-neutral-800/60">
-                            New Device
+                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 border border-sky-800/60 bg-sky-950/40 text-sky-300 text-[10px] uppercase font-mono tracking-wider rounded-sm">
+                            <Repeat className="w-2.5 h-2.5 text-sky-400" />
+                            <span>
+                              Revisiter{item.visitCount && item.visitCount > 1 ? ` (${item.visitCount}x)` : ""}
+                            </span>
                           </span>
                         )}
+                      </td>
+
+                      {/* 5. Engagement: Saw Resume badge */}
+                      <td className="py-3.5 pr-4 whitespace-nowrap">
+                        {item.sawResume || item.action === "resume_download" ? (
+                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 border border-emerald-800/60 bg-emerald-950/40 text-emerald-300 text-[10px] uppercase font-mono tracking-wider rounded-sm">
+                            <FileText className="w-2.5 h-2.5 text-emerald-400" />
+                            <span>Saw Resume</span>
+                          </span>
+                        ) : (
+                          <span className="text-neutral-600 font-mono text-xs pl-2">—</span>
+                        )}
+                      </td>
+
+                      {/* 6. Path */}
+                      <td className="py-3.5 text-right text-neutral-400 whitespace-nowrap">
+                        <code className="text-neutral-400 text-[11px] font-mono">
+                          {item.path || "/"}
+                        </code>
                       </td>
                     </tr>
                   ))}
@@ -589,30 +729,18 @@ export default function AnalyticsViewPage() {
               role="switch"
               aria-checked={rememberDeviceState}
               onClick={handleToggleRemember}
-              className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full p-0.5 transition-colors duration-300 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 border border-transparent ${
-                rememberDeviceState ? "bg-[#34C759]" : "bg-neutral-800 border-neutral-700/60"
+              className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ease-in-out cursor-pointer ${
+                rememberDeviceState ? "bg-white" : "bg-neutral-800 border border-neutral-700"
               }`}
             >
-              <span className="sr-only">Toggle remember device</span>
-              <span
-                className={`pointer-events-none inline-block size-6 transform rounded-full bg-white shadow-md ring-0 transition duration-300 ease-in-out ${
-                  rememberDeviceState ? "translate-x-5" : "translate-x-0"
+              <div
+                className={`bg-neutral-900 w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+                  rememberDeviceState ? "translate-x-6 bg-black" : "translate-x-0 bg-neutral-400"
                 }`}
               />
             </button>
           </div>
         </section>
-
-        {/* Footer Meta Row */}
-        <footer className="pt-2 pb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between text-neutral-500 text-xs font-mono gap-3 border-t border-neutral-900">
-          <div className="flex items-center space-x-2">
-            <Clock className="w-3.5 h-3.5 text-neutral-500" />
-            <span>Last updated: {lastUpdated}</span>
-          </div>
-          <div>
-            <span>Primary Timezone: Asia/Kolkata (IST)</span>
-          </div>
-        </footer>
       </div>
     </div>
   );
