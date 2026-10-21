@@ -78,6 +78,38 @@ const roles = [
     ],
   },
   {
+    title: "WRITER",
+    image: "/W.png",
+    projects: [
+      {
+        title: "AMY",
+        category: "SHORT FILM",
+        image: "/W.png",
+        videoUrl: "https://www.youtube.com/watch?v=pBq0c1OJWWU",
+        description:
+          "When Amy asks her best friend Elizabeth to attend a blind date in her place, what begins as a harmless favour leads to an unexpected connection. As Elizabeth and the mysterious \"Edward\" grow closer, the deception becomes increasingly difficult to maintain. When the truth is finally revealed, both are forced to confront the lies that brought them together and question whether a relationship built on false identities can still be genuine. Exploring themes of identity, authenticity, and modern dating, Amy is a character-driven romantic drama about finding real connection in a world shaped by digital personas.",
+        screenshots: [
+          "W.png",
+          "W2.png",
+          "W3.png",
+          "W5.png",
+          "W6.png",
+          "W7.png",
+          "W8.png",
+          "W9.png",
+          "W10.png",
+          "W11.png",
+          "W12.png",
+          "W13.png",
+          "W14.png",
+          "W15.png",
+          "W16.png",
+          "W17.png",
+        ],
+      },
+    ],
+  },
+  {
     title: "EDITOR",
     image: "/home2.png",
     projects: [
@@ -120,38 +152,6 @@ screenshots: ["e1.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.pn
                description:
           "American Beauty is a short student film focused on the experiences and expression of the trans community in America. The film aims to highlight themes of identity, visibility, and self acceptance through a stylised yet honest portrayal of identity and visibility.-As the producer, I led the project from development through production, managing schedules, locations, budgeting, crew coordination, and on set organisation. A key part of my role was creating a supportive environment where the director had full creative freedom to shape the narrative and visual style. I ensured that all logistical elements aligned with their vision, enabling them to focus purely on storytelling.-During the shoot, I handled day to day problem solving, time management, and communication across departments, skills that helped keep the production efficient and cohesive. This project strengthened my ability to balance artistic ambition with practical execution, and reinforced my interest in producing stories that explore underrepresented communities with sensitivity and care.",
               screenshots: ["p.png", "p2.png", "p3.png", "p5.png", "p6.png", "p7.png"],
-      },
-    ],
-  },
-  {
-    title: "WRITER",
-    image: "/W.png",
-    projects: [
-      {
-        title: "AMY",
-        category: "SHORT FILM",
-        image: "/W.png",
-        videoUrl: "https://www.youtube.com/watch?v=pBq0c1OJWWU",
-        description:
-          "When Amy asks her best friend Elizabeth to attend a blind date in her place, what begins as a harmless favour leads to an unexpected connection. As Elizabeth and the mysterious \"Edward\" grow closer, the deception becomes increasingly difficult to maintain. When the truth is finally revealed, both are forced to confront the lies that brought them together and question whether a relationship built on false identities can still be genuine. Exploring themes of identity, authenticity, and modern dating, Amy is a character-driven romantic drama about finding real connection in a world shaped by digital personas.",
-        screenshots: [
-          "W.png",
-          "W2.png",
-          "W3.png",
-          "W5.png",
-          "W6.png",
-          "W7.png",
-          "W8.png",
-          "W9.png",
-          "W10.png",
-          "W11.png",
-          "W12.png",
-          "W13.png",
-          "W14.png",
-          "W15.png",
-          "W16.png",
-          "W17.png",
-        ],
       },
     ],
   },
@@ -739,28 +739,23 @@ export default function HomePage() {
 
             <div className="space-y-6 text-sm leading-relaxed text-gray-700">
               <p>
-                <strong>Hriday Bajaj</strong> is a versatile Indian filmmaker and storyteller currently based in London.
-                Born and raised in Lucknow, Uttar Pradesh, he developed a passion for filmmaking, project management,
-                and collaborative creation. His work explores a diverse range of subjects, from contemporary social
-                issues to imaginative visual narratives. Prior to his current studies, he gained industry experience as
-                an intern at India TV, one of India's top national news channels. He is currently pursuing a BA (Hons)
-                in Film and Television from the University of Arts London. His credits include directing the music video{" "}
-                <em>Babuji Dheere Chalna</em>, producing the short film <em>American Beauty</em>, and editing the short
-                film <em>Trapped in Reverie</em>.
+                <strong>Hriday Bajaj</strong> is an Indian filmmaker and emerging director based in London. Born and raised in Lucknow, Uttar Pradesh, he is currently pursuing a BA (Hons) in Film and Television at the University of the Arts London (UAL). His work spans fiction, documentary, music videos, and talk shows, driven by a passion for storytelling, visual composition, and collaborative filmmaking.
               </p>
 
               <p>
-                Hriday's directorial documentary, <em>Crumbs or Traces?</em>, investigates the pervasive impact of web
-                cookies and digital tracking on everyday users. The film combines personal data analysis, street
-                interviews, and expert insights to raise awareness about online privacy and data ethics. Hriday tells
-                stories that leverage his adaptability and creative problem-solving, bringing a sharp sense of humor and
-                strategic thinking to each production.
+                Hriday has gained industry experience across film production and broadcasting, having interned at Bhansali Productions as an assistant director on Sanjay Leela Bhansali’s upcoming film <em>Love and War</em>, and at Story Films, a multi-BAFTA-winning production house. He has also worked at India TV, one of India’s leading news channels, and volunteered at the Raindance Film Festival.
               </p>
 
               <p>
-                He is a certified professional in both Adobe Premiere Pro and Adobe After Effects. He holds a BAFTA x
-                ALBERT certification for Sustainable Media Industry Module and continues to develop his craft as a
-                dedicated film student.
+                His directorial documentary, <em>Crumbs or Traces?</em>, explores the impact of web cookies and digital tracking on everyday users, combining personal data analysis, street interviews, and expert insights to examine online privacy and data ethics. His other credits include directing the music video <em>Babuji Dheere Chalna</em>, writing the short film <em>Amy</em>, producing <em>American Beauty</em>, and editing <em>Trapped in Reverie</em>, alongside work in sound design and on-set production.
+              </p>
+
+              <p>
+                Alongside his filmmaking, Hriday serves as Head of Film and TV at UAL’s Creative Entrepreneurship Society, creating opportunities for emerging filmmakers to develop projects, collaborate, and connect with industry professionals. He is also a UAL Student Ambassador and works in content and communications design at the London College of Communication.
+              </p>
+
+              <p>
+                A certified professional in Adobe Premiere Pro and Adobe After Effects, Hriday also holds a BAFTA albert certification in sustainable media. He brings a calm, solution-focused approach to filmmaking, with a grounded sense of humour, an eye for visual storytelling, and a keen interest in the creative and collaborative processes behind bringing stories to life.
               </p>
 
 <div className="mt-8">
@@ -881,6 +876,16 @@ export default function HomePage() {
 
               <button
                 onClick={() => {
+                  navigateToRole("writer")
+                  setIsMenuOpen(false)
+                }}
+                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
+              >
+                Writer
+              </button>
+
+              <button
+                onClick={() => {
                   navigateToRole("editor")
                   setIsMenuOpen(false)
                 }}
@@ -907,16 +912,6 @@ export default function HomePage() {
                 className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
               >
                 Producer
-              </button>
-
-              <button
-                onClick={() => {
-                  navigateToRole("writer")
-                  setIsMenuOpen(false)
-                }}
-                className="block w-full text-xl sm:text-2xl font-light tracking-[0.2em] text-black hover:text-gray-600 transition-colors menu-item"
-              >
-                Writer
               </button>
 
               <button
