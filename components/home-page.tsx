@@ -148,7 +148,7 @@ screenshots: ["e1.png", "e2.png", "e3.png", "e5.png", "e6.png", "e7.png", "e8.pn
         title: "AMERICAN BEAUTY",
         category: "SHORT FILM",
         image: "/home3.png",
-        videoUrl: "https://drive.google.com/file/d/11ZgkeQhRW4AI28kGxSfo-MQwx-i-6zhZ/view?usp=sharing",
+        videoUrl: "https://drive.google.com/file/d/1OwYjHK30otVvvlaTW3kOT49-MhBwh82c/view?usp=sharing",
                description:
           "American Beauty is a short student film focused on the experiences and expression of the trans community in America. The film aims to highlight themes of identity, visibility, and self acceptance through a stylised yet honest portrayal of identity and visibility.-As the producer, I led the project from development through production, managing schedules, locations, budgeting, crew coordination, and on set organisation. A key part of my role was creating a supportive environment where the director had full creative freedom to shape the narrative and visual style. I ensured that all logistical elements aligned with their vision, enabling them to focus purely on storytelling.-During the shoot, I handled day to day problem solving, time management, and communication across departments, skills that helped keep the production efficient and cohesive. This project strengthened my ability to balance artistic ambition with practical execution, and reinforced my interest in producing stories that explore underrepresented communities with sensitivity and care.",
               screenshots: ["p.png", "p2.png", "p3.png", "p5.png", "p6.png", "p7.png"],
