@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Menu, X, Instagram, Linkedin, Mail, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { getOrCreateAnonymousDeviceId, isDeviceExcluded } from "@/lib/analytics-utils"
+import { getCustomProjects, CustomProject } from "@/lib/custom-projects"
 
 const roles = [
   {
@@ -202,6 +203,16 @@ export default function HomePage() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
   const [selectedProject, setSelectedProject] = useState<any>(null)
   const [currentScreenshot, setCurrentScreenshot] = useState(0)
+  const [customProjects, setCustomProjects] = useState<CustomProject[]>([])
+
+  useEffect(() => {
+    getCustomProjects().then((items) => {
+      if (items && items.length > 0) {
+        // filter out drafts for live public views
+        setCustomProjects(items.filter((p) => !p.isDraft))
+      }
+    })
+  }, [])
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -274,7 +285,7 @@ export default function HomePage() {
       // Preload all project screenshots into memory immediately
       selectedProject.screenshots.forEach((src: string) => {
         const img = new Image()
-        img.src = `/${src}`
+        img.src = getImgSrc(src)
       })
 
       const interval = setInterval(() => {
@@ -283,6 +294,13 @@ export default function HomePage() {
       return () => clearInterval(interval)
     }
   }, [selectedProject])
+
+  
+  const getImgSrc = (src: string) => {
+    if (!src) return "/placeholder.svg"
+    if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:image")) return src
+    return src.startsWith("/") ? src : `/${src}`
+  }
 
   const getEmbedUrl = (rawUrl: string) => {
     if (!rawUrl) return ""
@@ -537,7 +555,7 @@ export default function HomePage() {
                   onClick={() => handleProjectClick(project)}
                 >
                   <img
-                    src={project.image || "/placeholder.svg"}
+                    src={getImgSrc(project.image)}
                     alt={project.title}
                     className="w-full h-full object-cover tile-image"
                   />
@@ -623,7 +641,7 @@ export default function HomePage() {
                   {project.screenshots.map((src: string, index: number) => (
                     <img
                       key={src + index}
-                      src={`/${src}`}
+                      src={getImgSrc(src)}
                       alt={`${project.title} screenshot ${index + 1}`}
                       className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
                         index === currentScreenshot ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
@@ -664,7 +682,7 @@ export default function HomePage() {
 
               {otherProjects.length > 0 && (
                 <div className="space-y-6">
-                  <h3 className="text-xl font-light tracking-wider text-black">MORE TO DIRECTOR</h3>
+                  <h3 className="text-xl font-light tracking-wider text-black">MORE TO {currentRoleHeading}</h3>
                   <div className="space-y-0">
                     {otherProjects.map((otherProject, index) => (
                       <div
@@ -673,7 +691,7 @@ export default function HomePage() {
                         onClick={() => handleProjectClick(otherProject)}
                       >
                         <img
-                          src={otherProject.image || "/placeholder.svg"}
+                          src={getImgSrc(otherProject.image)}
                           alt={otherProject.title}
                           className="w-full h-full object-cover tile-image"
                         />
