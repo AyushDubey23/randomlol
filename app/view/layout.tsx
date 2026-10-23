@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Portfolio Analytics",
-  description: "Private portfolio analytics dashboard",
+  title: "Analytics Portal | Hriday Bajaj",
+  description: "Secure Visitor Analytics Portal for Hriday Bajaj Portfolio",
   robots: {
     index: false,
     follow: false,
-    nocache: true,
-    googleBot: {
-      index: false,
-      follow: false,
-      noimageindex: true,
-    },
   },
 };
 

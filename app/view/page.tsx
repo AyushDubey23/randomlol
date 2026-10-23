@@ -36,6 +36,10 @@ import {
   Sparkles,
   Repeat,
   FileText,
+  Lock,
+  KeyRound,
+  AlertCircle,
+  LogOut,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import {
@@ -74,7 +78,15 @@ interface ActivityEvent {
   clickedAyushLink: boolean;
 }
 
+const PIN_STORAGE_KEY = "hriday_admin_auth_token";
+
 export default function AnalyticsViewPage() {
+  // Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [pinInput, setPinInput] = useState("");
+  const [pinError, setPinError] = useState<string | null>(null);
+  const [verifying, setVerifying] = useState(false);
+
   // Analytics data state
   const [analyticsLoading, setAnalyticsLoading] = useState(true);
   const [totalViews, setTotalViews] = useState(0);
@@ -93,6 +105,45 @@ export default function AnalyticsViewPage() {
 
   // Client hydration flag
   const [mounted, setMounted] = useState(false);
+
+  // Secure PIN submission via API route
+  const handlePinSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pinInput.trim()) return;
+
+    setVerifying(true);
+    setPinError(null);
+
+    try {
+      const res = await fetch("/api/admin/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: pinInput.trim() }),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (res.ok && data?.ok && data?.token) {
+        sessionStorage.setItem(PIN_STORAGE_KEY, data.token);
+        setIsAuthenticated(true);
+        setPinError(null);
+        setPinInput("");
+      } else {
+        setPinError(data?.message || "Invalid security PIN");
+        setPinInput("");
+      }
+    } catch {
+      setPinError("Verification error. Please try again.");
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem(PIN_STORAGE_KEY);
+    setIsAuthenticated(false);
+    setPinInput("");
+  };
 
   // Copy IP handler with user feedback
   const handleCopyIp = async (ip: string, eventId: string) => {
@@ -309,8 +360,20 @@ export default function AnalyticsViewPage() {
   useEffect(() => {
     setMounted(true);
     setRememberDeviceState(isDeviceRemembered());
-    loadAnalytics();
-  }, [loadAnalytics]);
+
+    if (typeof window !== "undefined") {
+      const stored = sessionStorage.getItem(PIN_STORAGE_KEY);
+      if (stored && stored.length > 10) {
+        setIsAuthenticated(true);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadAnalytics();
+    }
+  }, [isAuthenticated, loadAnalytics]);
 
   // Toggle "Remember this device"
   const handleToggleRemember = () => {
@@ -327,6 +390,72 @@ export default function AnalyticsViewPage() {
 
   if (!mounted) {
     return <div className="min-h-screen bg-[#090909] text-white" />;
+  }
+
+  // PIN Lock Screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-4 selection:bg-neutral-800">
+        <div className="w-full max-w-sm border border-neutral-800 bg-[#111111] p-8 shadow-2xl relative">
+          <div className="flex flex-col items-center text-center space-y-3 mb-6">
+            <div className="w-12 h-12 rounded-full border border-neutral-700 bg-neutral-900 flex items-center justify-center">
+              <Lock className="w-5 h-5 text-neutral-300" />
+            </div>
+            <div>
+              <h1 className="text-xl font-light tracking-[0.25em] uppercase text-white">
+                HRIDAY BAJAJ
+              </h1>
+              <p className="text-[11px] font-mono tracking-widest text-neutral-400 uppercase mt-0.5">
+                Analytics Portal
+              </p>
+            </div>
+          </div>
+
+          <form onSubmit={handlePinSubmit} className="space-y-4">
+            <div>
+              <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">
+                Enter Security PIN
+              </label>
+              <div className="relative">
+                <input
+                  type="password"
+                  maxLength={10}
+                  autoFocus
+                  placeholder="••••"
+                  value={pinInput}
+                  onChange={(e) => {
+                    setPinInput(e.target.value);
+                    setPinError(null);
+                  }}
+                  className={`w-full bg-[#181818] border ${
+                    pinError ? "border-red-500 text-red-300" : "border-neutral-700 text-white"
+                  } px-4 py-2.5 text-center text-xl font-mono tracking-[0.5em] focus:outline-none focus:border-white transition-colors`}
+                />
+                <KeyRound className="w-4 h-4 text-neutral-500 absolute right-3 top-3.5 pointer-events-none" />
+              </div>
+              {pinError && (
+                <p className="text-xs text-red-400 font-mono mt-1.5 flex items-center space-x-1 justify-center">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{pinError}</span>
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={verifying}
+              className="w-full py-2.5 bg-white text-black text-xs font-mono uppercase tracking-widest font-semibold hover:bg-neutral-200 transition-colors cursor-pointer disabled:opacity-50"
+            >
+              {verifying ? "Verifying..." : "Unlock Analytics"}
+            </button>
+          </form>
+
+          <p className="text-center text-[10px] text-neutral-600 font-mono mt-6">
+            Authorized Personnel Only
+          </p>
+        </div>
+      </div>
+    );
   }
 
   const firstDate = chartData.length > 0 ? chartData[0].label : "";
@@ -370,6 +499,14 @@ export default function AnalyticsViewPage() {
               <RefreshCw
                 className={`w-4 h-4 ${isRefreshing || analyticsLoading ? "animate-spin text-white" : ""}`}
               />
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="p-2 border border-neutral-800 hover:border-neutral-600 bg-neutral-900 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+              title="Lock Analytics Session"
+            >
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
