@@ -206,12 +206,17 @@ export default function HomePage() {
   const [customProjects, setCustomProjects] = useState<CustomProject[]>([])
 
   useEffect(() => {
-    getCustomProjects().then((items) => {
-      if (items && items.length > 0) {
-        // filter out drafts for live public views
-        setCustomProjects(items.filter((p) => !p.isDraft))
-      }
-    })
+    const loadPublished = () => {
+      getCustomProjects().then((items) => {
+        if (items && Array.isArray(items)) {
+          setCustomProjects(items.filter((p) => !p.isDraft))
+        }
+      })
+    }
+    loadPublished()
+
+    window.addEventListener("focus", loadPublished)
+    return () => window.removeEventListener("focus", loadPublished)
   }, [])
 
   useEffect(() => {
@@ -219,11 +224,17 @@ export default function HomePage() {
   }, [currentSection, selectedRole, selectedProject])
 
   useEffect(() => {
+    const searchRole = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("role") : null
+    const initialRole = searchRole ? searchRole.toLowerCase().replace(/[^a-z]/g, "") : null
+
     const initialState = {
       section: "home",
-      selectedRole: null,
+      selectedRole: initialRole,
       selectedProject: null,
       currentScreenshot: 0,
+    }
+    if (initialRole) {
+      setSelectedRole(initialRole)
     }
     window.history.replaceState(initialState, "")
 
@@ -450,8 +461,26 @@ export default function HomePage() {
     </div>
   )
 
+  const getCombinedRole = (roleTitle: string) => {
+    const cleanRoleTitle = (roleTitle || "").toLowerCase().replace(/[^a-z]/g, "")
+    const staticRole = roles.find(
+      (r) => r.title.toLowerCase().replace(/[^a-z]/g, "") === cleanRoleTitle
+    )
+    if (!staticRole) return null
+
+    // Filter published custom projects for this role
+    const dynamicProjects = customProjects.filter(
+      (cp) => !cp.isDraft && cp.role.toLowerCase().replace(/[^a-z]/g, "") === cleanRoleTitle
+    )
+
+    return {
+      ...staticRole,
+      projects: [...(staticRole.projects || []), ...dynamicProjects],
+    }
+  }
+
   const renderProjects = (roleTitle: string) => {
-    const role = roles.find((r) => r.title.toLowerCase().replace(/[^a-z]/g, "") === roleTitle)
+    const role = getCombinedRole(roleTitle)
     if (!role) return null
 
     if (roleTitle === "photographer") {
@@ -585,8 +614,10 @@ export default function HomePage() {
   }
 
   const renderProjectDetail = (project: any, roleTitle: string) => {
-    const role = roles.find((r) => r.title.toLowerCase().replace(/[^a-z]/g, "") === roleTitle)
-    const otherProjects = role?.projects?.filter((p) => p.title !== project.title) || []
+    const cleanRoleTitle = (roleTitle || "").toLowerCase().replace(/[^a-z]/g, "")
+    const role = getCombinedRole(cleanRoleTitle)
+    const otherProjects = role?.projects?.filter((p: any) => p.title !== project.title) || []
+    const currentRoleHeading = role?.title || roleTitle.toUpperCase()
 
     return (
       <div className="min-h-screen bg-background overflow-x-hidden">
@@ -630,55 +661,65 @@ export default function HomePage() {
               <div className="space-y-4">
                 <h2 className="text-3xl font-light tracking-wider text-black">{project.title}</h2>
                 <div className="text-sm leading-relaxed text-gray-700 space-y-3">
-                  {project.description
-                    .split("-")
-                    .map((line: string, index: number) => line.trim() && <p key={index}>{line.trim()}</p>)}
+                  {project.description ? (
+                    project.description
+                      .split("-")
+                      .map((line: string, index: number) => line.trim() && <p key={index}>{line.trim()}</p>)
+                  ) : (
+                    <p className="text-gray-400 italic">No description provided.</p>
+                  )}
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                  {project.screenshots.map((src: string, index: number) => (
-                    <img
-                      key={src + index}
-                      src={getImgSrc(src)}
-                      alt={`${project.title} screenshot ${index + 1}`}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
-                        index === currentScreenshot ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-                      }`}
-                      loading="eager"
-                    />
-                  ))}
-
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
-                    {project.screenshots.map((_: any, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentScreenshot(index)}
-                        className={`w-2 h-2 rounded-full transition-colors ${
-                          index === currentScreenshot ? "bg-white" : "bg-white/50"
+              {project.screenshots && project.screenshots.length > 0 && (
+                <div className="space-y-4">
+                  <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                    {project.screenshots.map((src: string, index: number) => (
+                      <img
+                        key={src + index}
+                        src={getImgSrc(src)}
+                        alt={`${project.title} screenshot ${index + 1}`}
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
+                          index === currentScreenshot ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
                         }`}
+                        loading="eager"
                       />
                     ))}
+
+                    {project.screenshots.length > 1 && (
+                      <>
+                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+                          {project.screenshots.map((_: any, index: number) => (
+                            <button
+                              key={index}
+                              onClick={() => setCurrentScreenshot(index)}
+                              className={`w-2 h-2 rounded-full transition-colors ${
+                                index === currentScreenshot ? "bg-white" : "bg-white/50"
+                              }`}
+                            />
+                          ))}
+                        </div>
+
+                        <button
+                          onClick={() =>
+                            setCurrentScreenshot((prev) => (prev === 0 ? project.screenshots.length - 1 : prev - 1))
+                          }
+                          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-20"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                        </button>
+
+                        <button
+                          onClick={() => setCurrentScreenshot((prev) => (prev + 1) % project.screenshots.length)}
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-20"
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </button>
+                      </>
+                    )}
                   </div>
-
-                  <button
-                    onClick={() =>
-                      setCurrentScreenshot((prev) => (prev === 0 ? project.screenshots.length - 1 : prev - 1))
-                    }
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-20"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-
-                  <button
-                    onClick={() => setCurrentScreenshot((prev) => (prev + 1) % project.screenshots.length)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-20"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
                 </div>
-              </div>
+              )}
 
               {otherProjects.length > 0 && (
                 <div className="space-y-6">
