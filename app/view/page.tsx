@@ -40,6 +40,7 @@ import {
   KeyRound,
   AlertCircle,
   LogOut,
+  ExternalLink,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import {
@@ -98,6 +99,7 @@ export default function AnalyticsViewPage() {
   const [lastUpdated, setLastUpdated] = useState<string>("Loading...");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [customIpInput, setCustomIpInput] = useState("");
 
   // Device remembering toggle state
   const [rememberDeviceState, setRememberDeviceState] = useState(false);
@@ -195,7 +197,7 @@ export default function AnalyticsViewPage() {
       >();
       let sumDownloads = 0;
 
-      dailySnapshot.forEach((docSnap) => {
+      dailySnapshot.forEach((docSnap: any) => {
         const data = docSnap.data();
         const downloads = Number(data.resumeDownloads) || 0;
         sumDownloads += downloads;
@@ -293,7 +295,7 @@ export default function AnalyticsViewPage() {
       try {
         const devicesRef = collection(db, "analytics_devices");
         const devSnapshot = await getDocs(devicesRef);
-        devSnapshot.forEach((docSnap) => {
+        devSnapshot.forEach((docSnap: any) => {
           const dev = docSnap.data();
           const devId = docSnap.id;
           const timeVal = dev.lastSeen || dev.firstSeen || new Date().toISOString();
@@ -714,7 +716,39 @@ export default function AnalyticsViewPage() {
                 Live stream of visitors with relative time, IP addresses, tags, and engagement
               </p>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const clean = customIpInput.trim();
+                  if (clean) {
+                    window.open(
+                      `https://www.opentracker.net/feature/ip-tracker?ip=${encodeURIComponent(clean)}`,
+                      "_blank",
+                      "noopener,noreferrer"
+                    );
+                  }
+                }}
+                className="flex items-center space-x-1.5"
+              >
+                <input
+                  type="text"
+                  placeholder="Track IP (e.g. 115.248.83.149)"
+                  value={customIpInput}
+                  onChange={(e) => setCustomIpInput(e.target.value)}
+                  className="bg-neutral-900 border border-neutral-800 focus:border-neutral-600 px-2.5 py-1 text-xs font-mono text-white placeholder-neutral-500 rounded-sm focus:outline-none w-48 sm:w-56"
+                />
+                <button
+                  type="submit"
+                  disabled={!customIpInput.trim()}
+                  className="inline-flex items-center space-x-1 px-2.5 py-1 bg-neutral-200 hover:bg-white text-black text-[11px] font-mono uppercase tracking-wider font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed rounded-sm cursor-pointer"
+                  title="Open Opentracker for this IP"
+                >
+                  <span>Track IP</span>
+                  <ExternalLink className="w-3 h-3 shrink-0" />
+                </button>
+              </form>
+
               <span className="text-[10px] font-mono uppercase tracking-[0.15em] px-2.5 py-1 border border-neutral-800 bg-neutral-900 text-neutral-400">
                 Live Feed ({recentViews.length} Events)
               </span>
@@ -769,7 +803,7 @@ export default function AnalyticsViewPage() {
                         </div>
                       </td>
 
-                      {/* 3. IP Address with Copy Button */}
+                      {/* 3. IP Address with Copy & Track Buttons */}
                       <td className="py-3.5 pr-4 text-neutral-300 whitespace-nowrap">
                         <div className="inline-flex items-center space-x-1.5 px-2 py-1 bg-neutral-900/90 border border-neutral-800 rounded-sm">
                           <span className="text-neutral-200 font-mono text-[11px]">
@@ -792,6 +826,18 @@ export default function AnalyticsViewPage() {
                               <Copy className="w-3 h-3 shrink-0" />
                             )}
                           </button>
+                          {item.ip && item.ip !== "Unknown IP" && (
+                            <a
+                              href={`https://www.opentracker.net/feature/ip-tracker?ip=${encodeURIComponent(item.ip)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title={`Track IP on Opentracker (${item.ip})`}
+                              className="inline-flex items-center space-x-1 px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 hover:text-sky-300 hover:bg-neutral-800 rounded transition-colors cursor-pointer border border-transparent hover:border-neutral-700"
+                            >
+                              <ExternalLink className="w-3 h-3 shrink-0 text-sky-400" />
+                              <span>Track</span>
+                            </a>
+                          )}
                         </div>
                       </td>
 
